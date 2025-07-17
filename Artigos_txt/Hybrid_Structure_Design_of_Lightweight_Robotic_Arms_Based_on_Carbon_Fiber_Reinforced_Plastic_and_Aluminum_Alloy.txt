@@ -1,0 +1,973 @@
+Received March 20, 2019, accepted May 1, 2019, date of publication May 7, 2019, date of current version May 31, 2019.
+Digital Object Identifier 10.1 109/ACCESS.2019.2915363
+Hybrid Structure Design of Lightweight Robotic
+Arms Based on Carbon Fiber Reinforced
+Plastic and Aluminum Alloy
+HAIBIN YIN
+ , JING LIU, AND FENG YANG
+Key Laboratory of Hubei Province for Digital Manufacture, School of Mechanical and Electronic Engineering, Wuhan University of Technology, Wuhan 430070, China
+Corresponding author: Haibin Yin (chinaliuyin@whut.edu.cn)
+This work was supported by the National Natural Science Foundation of China (NSFC) under Grant 51575409 and Grant 91848102.
+ABSTRACT Some light materials, such as hollow sphere composite (HSC), carbon ber reinforced plastic
+(CFRP), and aluminum alloy (AA), are currently used in the design of lightweight robotic arms. However,
+the high cost limit the use of HSC, the CFRP has a relatively low cost but poor processing property, and
+the AA has good processing property but relatively high density. To make up respective shortcomings, this
+study focuses on the design issues of lightweight robotic arms by using two kinds of materials. Based on the
+CFRP and AA, a hybrid structure design approach is proposed to minimize the total mass of the lightweight
+robotic arms with CFRP/AA hybrid structure. To accomplish the objective, structural dimensions and layer
+parameters in hybrid structures are parameterized as design variables subject to the strength, stiffness, and
+dynamic constraints. Moreover, the bonding strength of the interaction surfaces between CFRP and AA parts
+is also considered on the basis of the cohesive zone model (CZM). In optimization design, the ABAQUS and
+elitist non-dominated sorting genetic algorithm (NSGA-II) in modeFRONTIER utilizing the Python script
+are respectively employed for the structural analyses and iteration calculation. Finally, a design example and
+an experimental prototype are provided to validate the proposed method and compare with the previous AA
+prototype in mass with a reduction of 24.32%.
+INDEX TERMS Lightweight robotic arm, hybrid structure, optimization design, carbon ber reinforced
+plastic, aluminum alloy.
+I. INTRODUCTION
+Under the requirements of energy-efciency and productiv-
+ity, lightweight robotic arms are increasingly employed in the
+elds of industry, agriculture, service, and space exploration.
+The lightweight robotic arm denotes that it is required to
+reduce the weight of the arms satisfying specic conditions.
+To realize the lightweight design of robotic arms, there are
+three ways: drivetrain design for high torque density, structure
+optimization for fewer materials and use of light materials.
+Drivetrains used as actuators in the robotic arm account
+for a large proportion of the total mass, so they have a
+lot of potential for the improvement of torque density of
+these actuators. Smart materials, which are popularly used
+as actuator of soft robot, possess high torque density, such
+as dielectric elastomeric actuators (DEA) [1], electro active
+The associate editor coordinating the review of this manuscript and
+approving it for publication was Huaqing Li.polymer (EAP) [2], and shape memory alloy (SMA) [3].
+However, these articial muscles, which can contribute
+lightweight or adaptability, produce poor dynamic per-
+formance and positioning accuracy, and some drawbacks
+limiting their utility in specic cases. In the need of
+good dynamic performance and positioning accuracy of
+the lightweight robotic arm, traditional drivetrains are still
+the most common for lightweight design by increasing its
+torque density. Fujishima et al. introduced an optimiza-
+tion method to quickly design a permanent synchronous
+motor for high torque density [4]. Jing et al. proposed
+a structural design method for brushless DC motor in
+robotic joint [5]. Sulaiman et al. rstly studied the torque
+of a dual excitation switch-ux (DESF) motor, and then
+adopted a deterministic approach to optimize DESF motor's
+parameters and improve its torque density for target per-
+formances [6]. However, these studies were implemented
+to increase the torque density of motors, but disregarding
+649322169-3536 
+2019 IEEE. Translations and content mining are permitted for academic research only.
+Personal use is also permitted, but republication/redistribution requires IEEE permission.
+See http://www.ieee.org/publications_standards/publications/rights/index.html for more information.VOLUME 7, 2019
+H. Yin et al.: Hybrid Structure Design of Lightweight Robotic Arms Based on CFRP and AA
+the combination with gears or structure of robotic arm.
+Pettersson and Ölvander proposed a drivetrain optimiza-
+tion for nding the trade-offs between lifetime, properties
+and cost of industrial robots [7]. Zhou et al. presented
+an integrated optimization method to design a lightweight
+anthropomorphic arm, which is optimized based on the drive-
+trains selected from commercial catalog [8]. Nevertheless, the
+growth on the torque density of drivetrains is limited under the
+current technology conditions, and more the lightweight opti-
+mization of drivetrain is dependent on the structural param-
+eters. Therefore, the structural optimization is the main way
+for lightweight robotic arms when the types or technologies
+of drivetrains are determined.
+Structural optimization can reduce the unwanted material
+subject to the specic conditions. Shiakolas et al. discussed
+optimum robot design to minimize the torque required for
+the motion subject to defection and physical constraints with
+the design variables being the structural dimensions [9].
+Kim et al. presented a topology optimization method for the
+design of lightweight serial robots and performed the topol-
+ogy optimization of a robot structure by dividing the prob-
+lem into part-level optimization [10]. Structural optimization
+could reduce the weight of structure, but it could also lead the
+system to be prone to exible vibration. Hence, the dynamic
+compensation for stiffness is required to contribute the grade
+of lightweight by means of feedback control [11] and tra-
+jectory planning [12]. Fonseca and Bainum utilized semi-
+analytical approach to compute the sensitivity with respect
+to design parameters, and performed an integrated struc-
+tural/control optimization of a large space structure with a
+robot arm for obtaining the minimum weight and optimal
+dynamic performance [13]. Lee et al. optimized the kinematic
+variables of a welding robot for considering a mass reduction,
+and the desired trajectory of the welding robot was obtained
+through two steps of coarse and ne searching [14]. Both
+the structural optimization and dynamic compensation for
+stiffness aim at enhancing the stiffness-to-mass ratio from
+macro-scale level. While light materials with larger stiffness-
+to-mass ratio could attain lighter structure from micro-scale
+level.
+With development of material technique, there have
+been serval light materials with high stiffness and low
+density. Cheng et al. designed a fully plastic micro
+robot (FPMR) through the combination of the Cross-linked
+liquid-crystalline polymers and polyethylene lms [15]. Sim-
+ilarly, exible plastic was applied into the fabrication of
+underwater robot (UWR) to reduce its weight and the force
+generated by the differential pressure between inside and
+outside of the robot [16]. The plastic materials used in
+both the FPMR and UWR have high stiffness-to-mass ratio,
+but its absolute strength and stiffness are low. Hagenah
+et al. designed and manufactured the anges of the robotic
+arms with titanium and joint housing with nanocrystalline
+aluminum alloy, which can attain lighter structure than
+the conventional casting counterpart [17]. Baumeister and
+Klaeger reported the application of hollow-sphere-composite(HSC) [18] and used it to fabricate the SCARA robot
+arm, which is demonstrated with good static and dynamic
+properties compared with AA arm [19]. These abovemen-
+tioned materials have high stiffness-to-mass ratio and abso-
+lute strength, but high cost results in a barrier for wide
+usage in robotic arms. Some notable lightweight robotic
+arms, such as UR [20] and KUKA [21], were made of
+low-cost AA materials. In addition, Fiber reinforced plas-
+tic (FRP) possess not only relative low cost but also the high
+stiffness-to-mass ratio, so it is widely used in the design
+of lightweight structure. Liao et al. analyzed the optimal
+geometry and material fabrication parameters of lightweight
+arm with FRP [22]. Lee et al. introduced two kinds of robotic
+wrist blocks with carbon FRP (CFRP) and glass FRP (GFRP)
+to compare their stiffness [23]. Yoo et al. designed a sub-
+sea walking robot with CFRP to protect the robot from
+corroding and reduce its weight in contrast with the con-
+ventional metallic robot [24]. CFRP is a kind of popular
+material with good properties and widely used in lightweight
+structures, however, the CFRP materials are unsuitably
+used in the structure, which is complex part required con-
+nect in multi-body system, due to its poor processing
+property.
+To avoid the ber damage caused by machining, the com-
+plex pieces connecting with other parts could be fabri-
+cated by metal materials with good processing property and
+bonded with the CFRP structure. Mutasher et al. studied
+and fabricated a hybrid shaft by winding CFRP onto an
+AA tube with different winding angles and numbers of lay-
+ers, and denoted that the hybrid shaft has a better bending
+fatigue property when the ber placement with 45[25].
+Feng et al. investigated CFRP/AA hybrid tubes by using
+compression experiments and a theoretical analysis, where
+formulas describing the compressive bearing capacity with
+and without local buckling before yielding are proposed for
+the hybrid tubes [26]. The hybrid tube is a single component
+with simple shape and the corresponding researches disre-
+garded the adhesive strength between both the parts with
+different materials, while the complex part used in multi-
+body structure is required to consider the adhesion strength.
+The cohesive zone model (CZM) is generally used in the
+analysis of the failure characteristics in the hybrid struc-
+ture [27]. Ribeiro et al. used CZM to perform a detailed
+stress analysis that enables the comparison between different
+planes in the adhesive joint and values of overlap length in
+the hybrid structure [28]. Jeon et al. proposed a design of
+CFRP/AA hybrid upper arm for the pantograph of high-speed
+trains in consideration of the failure of adhesion layer at
+high temperature and its mechanical performance [29]. These
+investigations involving the geometry parameters, layer num-
+bers as well as the adhesive strength in the hybrid structure
+are useful reference in the design of lightweight structure.
+JACO is a typical lightweight robotic arm with CFRP/AA
+hybrid structure [30], but the closed CFRP shell, in which its
+AA actuator is completely embedded, results in difculty of
+dispersing heat.
+VOLUME 7, 2019 64933
+H. Yin et al.: Hybrid Structure Design of Lightweight Robotic Arms Based on CFRP and AA
+FIGURE 1. (a) Prototype of robotic arm made of AA and (b) model of robotic arm based on CFRP/AA.
+This study extends the hybrid structure method in the previ-
+ous design of the 4-DOF robotic arm with AA material [31] to
+improve its lightweight level and heat dissipation. The hybrid
+structure design is presented as an optimization problem,
+which minimizes the weight of robotic arm subject to the
+constraints conditions on structural strength, stiffness and
+dynamic performance, as well as adhesive strength between
+AA and CFRP components. In the optimization, the structural
+parameters of AA parts and the stacking sequences and layer
+numbers of CFRP components are dened as design vari-
+ables. The hybrid structures of robotic arm are simultaneously
+optimized on the basis of NSGA-II instead of multi-level
+optimization algorithm, so this design could obtain a global
+optimum solution for the lightweight robotic arm. Finally,
+a CFRP/AA experimental prototype is fabricated, and then
+series of experiments on the lightweight feature and dynamic
+characteristics of the hybrid structure prototype is measured
+to compare with the AA prototype and validate the optimiza-
+tion method.
+II. PROBLEM STATEMENT AND DESIGN CONDITIONS
+In general, AA is a preferred material for lightweight robotic
+arms considering the cost and processing. Figure 1(a) shows
+an AA prototype of the 4-DOF robotic arm, which was devel-
+oped for service tasks in mobile robot based on the previous
+research [31]. However, the AA prototype was implemented
+as a conceptual design with holes and slots to reduce the
+weight of robotic arms, moreover the AA material consti-
+tuting the prototype have provided low damping ratio and
+limited lightweight design. Hence, a lighter material with
+higher damping ratio and a streamline design with round
+shape are required. To realize this target, composite material
+CFRP, which is characterized by low density, high strength
+and damping ratio, is an ideal alternative. CFRP is commonly
+used as the structural material to build monolithic compo-
+nents because it is not suitable to use the machining process
+for bolt and assembly connects. However, the robotic arms
+are typical multibody structures and the connecting part of
+each component at joint is required to use machining process.
+Therefore, a hybrid structure integrating the links made of
+CFRP and the connecting part manufactured from AA is
+presented to design the lightweight robotic arm.A. PROBLEM STATEMENT
+Figure 1(b) depicts the model of robotic arm with hybrid
+structures, which consist of the connecting parts and links.
+The connecting parts include the ear plates and lining of joint
+housing made of AA (ALJH), which are characterized by
+complex geometrical shapes with assembly and connecting
+holes. The CFRP links are built as a monolithic component
+with the shell of joint housing made of CFRP (CSJH). The
+hybrid structure made of both the AA and CFRP materials
+show complex shape and anisotropy based on machining,
+bonding and forming processes, so the lightweight design is
+a challenging task. To obtain the optimal hybrid structure,
+the whole robotic arm with CFRP/AA hybrid structures is
+modeled and analyzed in ABAQUS, where the hybrid struc-
+tures are parameterized to optimize the robotic arm in consid-
+eration of the objective function as well as the working and
+constraints conditions. In this optimization problem, the main
+parameters of links and joint housing in the hybrid structures
+are dened as the design variables, and the corresponding
+constraints conditions are presented to ensure the validity of
+optimal results.
+B. PRECONDITION OF DESIGN
+The optimization design of the lightweight robotic arm with
+hybrid structures is conducted on the basis of the AA proto-
+type and only the upper arm and forearm are replaced with
+CFRP/AA hybrid structures. Thus, several structural param-
+eters are used as the same values with the AA prototype, for
+example, the lengths of links and height of base are used as
+L1D319 mm, L2D251 mm, L3D130 mm, hD250 mm
+as shown in Fig. 1(a). Moreover, the lengths of the upper arm
+and forearm (L 1andL2) are determined by considering global
+condition index (GCI) [32] parameter as 0.3125 to obtain
+the optimal workspace [31]. In addition to these structural
+parameters, the robotic arm with hybrid structures is actuated
+by these drivetrains, which are composed of the same Maxon
+motors and XBHY harmonic gears used in the AA prototype
+as listed in Table 1. The AA prototype was designed by
+considering the specic task conditions, and the robotic arm
+with CFRP/AA hybrid structure is optimized on the basis of
+the same task conditions, which are termed as the load and
+trajectories.
+64934 VOLUME 7, 2019
+H. Yin et al.: Hybrid Structure Design of Lightweight Robotic Arms Based on CFRP and AA
+TABLE 1. Motors and harmonic gears used in the four joints.
+FIGURE 2. Two types of trajectories in (a) ground and (b) wall
+installations.
+TABLE 2. Installation types and trajectories.
+The kinematic and dynamic simulations of the robotic arm
+are analyzed by considering a group of trajectories. As shown
+in Fig. 2, the robotic arm moves along two types of trajecto-
+ries in each installation, which is divided by gravity vectors
+g1D[0;0; 1] and g2D[1;0;0]. Therefore, the robotic
+arm is conducted in four motions totally, and these motions
+are described with the starting and ending positions as listed
+in Table 2. Using polynomial interpolation, these trajectories
+are represented byV
+qj.t/Dn
+a0Ca1tCa2t2Ca3t3Ca4t4Ca5t5o
+j;
+jD1;2;3;4; (1)
+where the six coefcients could be determined by using the
+values of positions, velocities and accelerations at the starting
+time t1D0 and ending time t2D3 s.
+In addition, the target payload me, which is a mass point,
+is given as 2 kg in this study.
+C. DESCRIPTIONS OF HYBRID STRUCTURE
+Figure 3 shows the principal model of the ith hybrid structure
+(iD1, 2), which includes the CFRP link and the CFRP
+shell of joint housing (CSJH), as well as the AA ear plate
+FIGURE 3. Principal model of the ith hybrid structure (i D1;2).
+and the AA lining of joint housing (ALJH). The both types of
+parts are connected by bonding or packing prepreg process.
+To fasten the connection, The ALJH was fabricated with some
+technology grooves before packing and forming with CFRP,
+and the AA ear plate was bonded with the CFRP link by using
+a bonding layer.
+III. OPTIMIZATION PROBLEM AND METHOD
+Based on the abovementioned design conditions and descrip-
+tions of hybrid structure, a hybrid structure design of the
+lightweight robotic arm are proposed in this section. It is
+an optimization problem aiming at hybrid structures and
+the optimization process is implemented in the integration
+platform including ABAQUS and modeFRONTIER.
+A. DESIGN VARIABLES
+In the optimization process, the hybrid structures are opti-
+mized by considering the design variables of the joint hous-
+ings and links.
+1) DESIGN VARIABLES OF JOINT HOUSING
+As shown in Fig. 4(a), the ith joint housing is a part of the ith
+hybrid structure. To connect with the CFRP link and install
+the drivetrain, the joint housing is designed into two parts:
+ALJH and CSJH as shown in Figs. 4(c) and (d). The CSJH
+part is integrated with the CFRP link by forming in a steel
+mold and also wrapped on the surface of the ALJH part. Thus,
+the design variables of the joint housing consisting of the both
+ALJH and CSJH parts are described as these corresponding
+parameters of the ALJH and CSJH parts.
+Using FEA in ABAQUS, the stress distribution pattern
+of the second joint housing in AA prototype is obtained as
+shown in Fig. 4(b). We can summarize that the maximum
+stress occurs around the bolt holes and transitional area on
+the xing ange. Consequently, the thickness tJiof the xing
+ange is a signicant factor to inuence the strength of joint
+housing and is selected as one design variable of joint housing
+as shown in Fig. 4(c). In addition, the external radius RJiof the
+ALJH part is optimized to reduce the weight of joint housing.
+In the optimization design, the inside radius rAiand the axial
+length Lciof the ALJH part are xed to match the structural
+VOLUME 7, 2019 64935
+H. Yin et al.: Hybrid Structure Design of Lightweight Robotic Arms Based on CFRP and AA
+FIGURE 4. (a) Model of joint housing, (b) stress pattern of joint housing
+in AA prototype, (c) design variables of ALJH and (d) design variables of
+CSJH.
+dimensions of drivetrains, which are given and used in the
+AA prototype. As a result, the design variables of the ALJH
+parts are described asV
+HA
+JD
+HA
+J1;HA
+J2
+D 
+RJ1;tJ1;RJ2;tJ2
+; (2)
+where HA
+Jrepresents all design variables of the ALJH parts,
+HA
+J1andHA
+J2denote the design variables of the ALJH parts
+in the rst and second hybrid structures. Superscript Arepre-
+sents AA component.
+Figure 4(d) depicts the CSJH part, its inside radius RJi
+is same with the external radius of the ALJH part due to
+the connection relation. Additionally, the thickness tc
+Jiof the
+CSJH part is related with the each ply thickness tcand the
+ply number NJi, and the each ply thickness tcis a xed
+value that is dependent on the dimension of prepreg. Hence,
+the ply number NJithat determines the thickness of the CSJH
+part is taken into account as one design variable. Moreover,
+it can be observed that i
+Nis the Nth ply orientations in the
+ith CSJH part, these ply orientations are termed as stacking
+sequence or a vector Seq Ji. To balance the stack and obtain
+excellent mechanics properties, the ply orientations in stack-
+ing sequence are designed symmetrically, so the actual ply
+number are double the independent ply number NJi. Since
+the stacking sequence have an impact on the integral stiffness
+and frequency of robotic arms, it is used as design variables
+and expressed as Seq JiD
+i
+1=i
+2=:::=i
+N
+s, where each
+element is a specic ply angle and selected from the set {-
+45, 0, 45, 90} due to the limitation on raw materials and
+cost. The design variables of the CSJH parts are described
+asV
+HC
+JD
+HC
+J1;HC
+J2
+D 
+NJ1;SeqJ1;NJ2;SeqJ2
+;(3)
+where HC
+Jrepresents all design variables of the CSJH parts,
+HC
+J1andHC
+J2denote the design variables of the CSJH parts
+in the rst and second hybrid structures. Superscript Crepre-
+sents CFRP component.
+As a result, the design variables of joint housings are
+dened as a vector HJ, which can be represented byV
+HJD.HJ1;HJ2/
+D 
+NJ1;SeqJ1;RJ1;tJ1;NJ2;SeqJ2;RJ2;tJ2
+; (4)
+FIGURE 5. (a) Hybrid structure model and (b) design variables of the
+CFRP link.
+where HJ1and HJ2denotes the design variables of
+joint housings in the rst and second hybrid structures,
+respectively.
+2) DESIGN VARIABLES OF LINKS
+As shown in Fig. 5(a), the CFRP link is a cylindrical
+shell in the ith (iD1;2) hybrid structure. To compare
+the kinematics performance of the proposed robotic arm
+with the AA prototype, the lengths Liof the CFRP links
+in the hybrid structures are the same values as the AA
+counterpart determined in the previous optimization based
+on GCI [32]. Similarly, the inner radius RLiof cylindri-
+cal link is set as given value for connection with the ear
+plate. Regarding the weight of the CFRP link, the thickness
+tLiof cylindrical link, which is related to the ply number
+MLiand each ply thickness tc, should be limited. Because
+the ply thickness is constant due to the use of prepreg,
+the thickness of cylindrical link is only dependent on the ply
+number MLi.
+Consequently, the design variables of the ith CFRP link are
+described as ply number MLiand stacking sequence Seq LiD
+i
+1=i
+2=:::=i
+M
+s, where the symbol i
+Mdenotes the Mth ply
+angle in the CFRP link of the ith hybrid structure, and the ply
+angles are limited to select from the specic range { 45, 0,
+45, 90}. All design variables of the both CFRP links can be
+represented byV
+HLD.HL1;HL2/D 
+ML1;SeqL1;ML2;SeqL2
+;(5)
+where HL1andHL2denote the design variables of the CFRP
+links in the rst and second hybrid structures, respectively.
+In addition to the design variables of CFRP links, a charac-
+teristic parameter related to the thickness and length of link,
+is dened asV
+DtLi
+Li;iD1;2; (6)
+If the value of the characteristic parameter is less
+than 0.1, the CFRP links can be discretized into shell
+element in nite element method to improve calculation
+efciency.
+64936 VOLUME 7, 2019
+H. Yin et al.: Hybrid Structure Design of Lightweight Robotic Arms Based on CFRP and AA
+3) DESIGN VARIABLES OF HYBRID STRUCTURES
+Consequently, the design variables of the hybrid structures in
+the robotic arm are briey expressed asV
+XD.X1;X2/
+DML1;SeqL1;NJ1;SeqJ1;RJ1;tJ1;ML2;
+SeqL2;NJ2;SeqJ2;RJ2;tJ2
+; (7)
+where X,X1andX2are the design variables of the both hybrid
+structures, design variables of the rst and second hybrid
+structure, respectively.
+These design variables related to the kinematics and
+dynamic behavior of robot are renewed in the entire design
+process to obtain the optimal objective and meet the corre-
+sponding constraint conditions.
+B. CONSTRAINTS CONDITIONS
+In the lightweight optimization of robotic arm with hybrid
+structures, these constraints on strength, stiffness, and bond-
+ing damage are supposed to be considered to validate the
+computations.
+1) CONSTRAINTS ON STRENGTH
+The hybrid structures of robotic arm are composed of AA
+parts and CFRP components; hence the optimization need
+consider the corresponding strength conditions for different
+material parts.
+For AA parts, the Von-Mises equivalent stress of the ALJH
+and ear plate are mainly considered to satisfy the constraints
+on structural strength and represented byV
+S1A.X/s; (8)
+where Xis the design variables of hybrid structures, and A
+andsdenote the maximum Von-Mises equivalent stress of
+AA parts and the yield strength of AA material. The symbol
+S1is the structural safety coefcient.
+These constraints on structural strength are evaluated
+through the static structural analysis in ABAQUS and
+imported into modeFRONTIER to optimize the structural
+parameters.
+For CFRP parts, the internal stresses are simulated accord-
+ing to the failure criteria, which is different from isotropic AA
+material. Comparing with the maximum stress and maximum
+strain criterions, the TsaiWu criterion [33] presents a concise
+analytical expression in consideration of the strong coupling
+effects among the stress components. To validate strength
+analysis for CFRP parts under the action of load, the TsaiWu
+failure criterion is used in strength analysis and described asV
+CvDF11[1(X)]2C2F121(X) 2(X)CF22[2(X)]2
+CF66[12(X)]2CF11(X)CF22(X)<Cvmax; (9)
+where1and2are the normal stress related to the ber
+orientation and transverse direction, and 12is shear stress;
+CvandCvmaxare the Tsai-Wu failure index and its maximum
+permissible value; the coefcients are described asV
+F11D1
+.XcXt/;F12D1
+.XcXtYcY/1/2;F22D1
+.YcYt/;F66D1.
+S2;
+F1D.Xc Xt/
+.XcXt/;F2D.Yc Yt/
+.YcYt/; (10)
+where XcandXtrepresent the compression and tension failure
+stress in ber orientation, YcandYtdenote compression and
+tension failure stress in transverse direction, Sis the shear
+failure stress.
+When the value of Cvis not less than 1, the CFRP structure
+is termed as failure. Until the value of Cvis smaller than 1,
+the CFRP parts in the robotic arm are feasible.
+2) CONSTRAINTS ON STIFFNESS
+The robotic arm yields the deformation when its stiffness is
+insufcient due to the lightweight design. Therefore, the con-
+straints on stiffness reected by the deformation and fre-
+quency are required to consider in optimization.
+In the design, the maximum value of deformation at the
+end-effector of the robotic arm is calculated and need meet
+the following conditions asV
+S2u.X/maxda; (11)
+where u(X) maxis the maximum values of deformation at end-
+effector of the robotic arm in three-dimension coordinates, da
+is the allowable values of deformation at end-effector of the
+robotic arm. The symbol S2is the stiffness safety coefcient.
+In addition to the deformation constraints, the dynamic
+frequency of the robotic arm should be considered in the
+lightweight design. Thus, the natural frequency of the present
+robotic arm is constrained to attain better dynamic character-
+istics. In the optimization, the natural frequency is calculated
+in ABAQUS and need meet the following conditionsV
+v.X/f;
+fDmaxfn j
+60;jD1;2;3;4g; (12)
+where v(X) is the rst natural frequency (FF) of the robotic
+arm, and fis the maximum value of the excited frequencies
+from four joint speeds (n j) of the robotic arm.
+3) CONSTRAINTS ON BONDING DAMAGE
+In the hybrid structures, the AA ear plates are bonded with
+the CFRP link by using the bonding adhesive. The interfacial
+behavior of adhesive layer is analyzed by using the CZM.
+The fracture initiation of the adhesive layer is evaluated by
+the quadratic stress criterion [34], which is widely applied in
+adhesive joint and described asV
+< n.X/>
+nc2
+Cs.X/
+sc2
+Ct.X/
+tc2
+D1; (13)
+wheren,s,t, andnc,sc,tcdenote the normal stress,
+in-plane shear stress, out-of-plane shear stress, and corre-
+sponding critical values, respectively. The mathematic sym-
+bol<> represents the Macauley operator as: <x>D
+0:5(xCjxj).
+When there is damage propagation in the adhesive layer,
+a damage parameter D, which is represented by the damage
+VOLUME 7, 2019 64937
+H. Yin et al.: Hybrid Structure Design of Lightweight Robotic Arms Based on CFRP and AA
+FIGURE 6. Simulation results of the adhesive layer in hybrid structure.
+stiffness of cohesive elements, is described asV
+D(X)D8
+>><
+>>:0; mm0;
+m1(m m0)
+m(m1 m0);  m0< m< m1
+1; mm1;(14)
+wheremis an equivalent value of the strain in the adhesive
+layer,m0andm1are the corresponding values at the begin
+and end of fracture. The values 0 and 1 represent that the
+cohesive layer is perfect and complete fracture. Between the
+values 0 and 1, the strains and stresses can be described asV
+2
+4n
+s
+t3
+5D2
+64(1 D)K nnC< n>
+ n0 0
+0 (1 D)K ss 0
+0 0 (1 D)K tt3
+75
+2
+4n
+s
+t3
+5; (15)
+where Knn,KssandKttrepresent the damage stiffness in
+normal and both tangential directions. n,sandtrepresent
+the strains in normal and both tangential directions. The
+equivalent value of the strain is described asV
+mDq
+.< n>/2C.s/2C(t)2:
+As a result, the constraints on bonding damage for adhesive
+zone are represented byV
+D(X)<Df; (16)
+where Dfis the maximum value of permissible damage
+parameter with reliable connections.
+In this study, the parameter Dthat is equal to the index
+SDEG is evaluated in the ABAQUS software. For example,
+a mesh model of adhesive layer in the second hybrid structure
+is presented with the value of SDEG as shown in Fig. 6.
+If the value of SDEG is less than 1, the adhesive layer is
+undamaged.
+C. OBJECTIVE FUNCTION
+In this study, the objective of the optimization problem is to
+design a lightweight robotic arm with CFRP/AA hybrid struc-
+tures that fulll all constraint conditions on strength, stiffness
+FIGURE 7. Flowchart of the hybrid structure optimization for the
+lightweight robotic arm.
+and bonding damage. The objective function is dened asV
+Mininizeh(X )Dh1.X1/Ch2.X2/; (17)
+where h1(X1) and h2(X2) is the mass of the rst and second
+hybrid structure respectively, and h(X) denotes the total mass
+of hybrid structures.
+D. DESIGN PROCESS AND ALGORITHM
+Figure 7 depicts the owchart of the hybrid structure opti-
+mization for the lightweight robotic arm, which consists of
+design of experiment (DOE), FEM analysis, data process and
+renewal.
+First, the initial conditions are presented and the initial
+population (N p) related to the design variables are generated
+by DOE, where each sample need fulll all constraint condi-
+tions.
+Second, the design variables of samples are imported
+into ABAQUS and the parameterized models of the robotic
+arms with hybrid structures are automatically established
+to calculate the values of stress, stiffness, frequency and
+mass of the hybrid structures by using a Python script lan-
+guage in ABAQUS. According to the condition in Eq. (6),
+CFRP links and CSJH are discretized into shell elements
+in FEM analysis. While the adhesive layers are calculated
+with cohesive elements and the other parts are modeled
+with
+64938 VOLUME 7, 2019
+H. Yin et al.: Hybrid Structure Design of Lightweight Robotic Arms Based on CFRP and AA
+TABLE 3. Values of mechanical parameters of CFRP Material (unit: GPa).
+solid elements. In addition, the whole robotic arm is
+meshed with the size of 2.5 mm. The foundation bed of the
+robotic arm is xed upon six degrees of freedom and the end
+effector is subjected to a given load.
+Third, every calculated result of samples are evaluated with
+corresponding constraints to select the feasible individuals
+and produce new individuals, which are used to generate a
+new population by using NSGA-II in modeFRONTIER.
+Finally, the second and third steps are calculated all over
+again until the iteration number of calculation Ntexceed the
+minimum iteration number at.
+In conclusion, the whole optimization process is performed
+on integrated platform with Python script in ABAQUS used to
+static analysis and the genetic algorithm in modeFRONTIER.
+After the optimization, a dynamic analysis for the optimized
+robotic arm in MSC.ADAMS is conducted to validate the
+energy conversation and driving ability.
+IV. DESIGN EXAMPLE
+A. MATERIAL PARAMETERS AND CALCULATION
+CONDITIONS
+To optimize the robotic arm, the material parameters are
+necessary to be specied. The robotic arm with hybrid
+structures is made of aluminum alloy (6061-T6) and car-
+bon ber (T700/BA9916), and the mechanical parameters
+of materials are assigned to evaluate the strength and stiff-
+ness. The aluminum alloy is an isotropic material, and its
+Young's modulus EAand yield strength sare assigned
+to 69000 Mpa and 270 MPa, respectively. While carbon
+ber is anisotropic material, so the elasticity modulus and
+yield strength include various parameters and are listed
+in Table 3.
+Regarding the bonding adhesive, the critical stress are set
+asncD60 MPa,scDtcD80 MPa, the initial damage
+stiffness are given as KnnD2 GPa, KssDKttD1:5 GPa,
+and the release rates of fracture energy are xed as GC
+nD0:78
+N/mm, GC
+sDGC
+tD1:36 N/mm, respectively. The damage
+parameter of cohesive zone is DfD1 mm.
+In addition, the Poisson's ratio of aluminum alloy and
+bonding adhesive are xed as 0.32 and 0.33 respectively,
+and the thickness tcof prepreg is given as 0.2 mm. The
+density of aluminum alloy ( A) and CFRP ( c) materials are
+2700 kg/m3and 1600 kg/m3, respectively. The structural andTABLE 4. Mapping relationship between numbers and ply angles.
+stiffness safety coefcients are set to S1DS2D1:2, and the
+maximum value of allowable deformation in three directions
+is given as daD0:6 mm. The maximum value of Tsai-Wu
+failure index Cvmaxis set to 1.
+In the genetic algorithm, the initial population Np, which
+is generated in modeFRONTIER by DOE based on a random
+sequence, is given as 17 and the number of generation Ngis
+set to 10. Hence, the minimum iteration number atshould
+be 170.
+B. INITIALIZATION OF DESIGN VARIABLES
+Besides the material parameters and calculation conditions,
+the initial values and feasible ranges of the design variables
+are necessary. In particular, the stacking sequences repre-
+sented by a group of ply angles are transformed into an inte-
+ger variable to facilitate the programmable computation and
+realize updating in optimization. The mapping relationship
+between ply angles and numbers is listed in Table 4. Based
+on the mapping relationship, the transformation formula of
+the stacking sequences into integer variables are represented
+byV
+SeqJiDNJiX
+jD14NJi ji
+j;SeqLiDMLiX
+jD14MLi ji
+j;
+i
+j2[0;1;2;3];i
+j2[0;1;2;3]; (18)
+Four ply angles are used in the transformation and then
+any stacking sequence can be transformed into a quaternary
+number, which is an integer to simplify the description and
+calculation.
+In this design example, the initial values and ranges of the
+design variables of CFRP/AA hybrid structures are described
+and listed with data type and step-size as shown in Table 5.
+All the starting values in these ranges are the initial val-
+ues of the corresponding design variables. And then, initial
+populations are produced to perform the genetic algorithm
+based on the initial values and ranges of design variables in
+modeFRONTIER.
+C. OPTIMAL RESULTS AND DISCUSSION
+Based on these parameter values of materials used in
+the hybrid structures and initialization of design variables,
+the CFRP/AA hybrid structures in the robotic arm can be
+achieved optimum solution.
+Figures 8 and 9 illustrate the convergences of the design
+variables of joint housing and link in the rst hybrid struc-
+ture. In the convergences, these values of design variables,
+which change within the given ranges and make the calcu-
+lated results fulll all conditions, are retained and marked in
+VOLUME 7, 2019 64939
+H. Yin et al.: Hybrid Structure Design of Lightweight Robotic Arms Based on CFRP and AA
+TABLE 5. Initial values and ranges of design variables of hybrid
+structures.
+FIGURE 8. Convergences of design variables of joint housing in the first
+hybrid structure: (a) RJ1and (b) tJ1.
+TABLE 6. Optimal results of all design variables of the both hybrid
+structures.
+color points. The design variables RJ1andtJ1of ALJH are
+convergent to the optimal results that are close to the smallest
+values in the given ranges through about 100 iterations. The
+other design variables can converge faster except that the
+design variable NJ1converges to a stable value in the need
+of 123 iterations.
+Table 6 presents the optimal results of the design variables
+of both hybrid structures. It can be observed that the stacking
+sequences of all CFRP parts are solved in integers, which
+can be transformed into quaternary sequences by means of
+FIGURE 9. Convergences of design variables of CFRP link in the first
+hybrid structure: (a) ML1and (b) SeqL1.
+FIGURE 10. Convergences of weight of the hybrid structures: (a) hi(Xi)
+and (b) h(X).
+Hybrid structure 2Hybrid structure 1
+FIGURE 11. Experimental prototype of the both hybrid structures.
+Eq. (18). Therefore, the stacking sequences represented by
+quaternary sequences can be mapped to the ply angles in
+terms of the mapping relationship shown in Table 4. As a
+result, the optimal results of the design variables Seq J1,
+Seq J2,Seq L1andSeq L2listed in Table 6 are transformed into
+the angular vectors [ 45/90/ 45/0/0], [ 45/90
+/-45], [90/0/90/0] and [0/ 90/90/0], respectively.
+In addition, the actual ply numbers are double the opti-
+mal results of the design variables NJiandMLi, and are
+represented by the numbers in brackets in Table 6. The ply
+orientations of CFRP parts are designed symmetrically, so the
+actual stacking sequences are described as [ 45/90/ 45
+64940 VOLUME 7, 2019
+H. Yin et al.: Hybrid Structure Design of Lightweight Robotic Arms Based on CFRP and AA
+FIGURE 12. (a) Experimental prototype of the lightweight CFRP/AA arm, (b) Experimental prototype of the lightweight AA arm, (c) EPOS-studio in PC, and
+(d) schematic of torque measurement.
+TABLE 7. Optimal results of mass of the hybrid structure in robotic arms
+(unit: g).
+/0/0]s, [ 45/90/-45]s, [90/0/90/0]sand [0/90/90
+/ 0]s, respectively.
+Figure 10 depicts the convergences of the weight of hybrid
+structures. In Figure 10(a), the symbol hi(Xi) denotes the
+mass of the ith hybrid structure. The convergence of the
+weight of the second hybrid structure is faster than that of
+the rst hybrid structure because the second hybrid structure
+is a load on the rst hybrid structure and the former can
+affect the latter, which is not completely dependent on the
+former in calculation. Figure 10(b) shows the convergence
+of the total weight of hybrid structures in the robotic arm.
+The optimal results of the mass of hybrid structures are listed
+in Table 7, and are compared with the corresponding values
+of the counterpart in the AA prototype.
+Table 7 shows that the hybrid structure design has a
+reduction of 27.84% and 19.21% of the mass of mono-
+lithic hybrid structure respectively, by comparing with the
+AA structure design [31]. These results imply that the rst
+hybrid structure has larger optimized space than the second
+hybrid structure. As a result, the total mass of hybrid struc-
+tures has a reduction of 24.32%, which is in between the
+values of 27.84% and 19.21%, in comparison with the mass
+of AA structures. Hence, the hybrid structure design of the
+robotic arm can obtain a lighter structure, and a series of
+experiment tests are performed on the prototype to validate
+the hybrid structure design.
+V. EXPERIMENT AND VERIFICATION
+A. EXPERIMENTAL PROTOTYPE AND TRAJECTORIES
+Figure 11 depicts the experimental prototypes of the both
+hybrid structures, which are made of T700/BA9916 and
+6016-T6 based on the optimal results. The total mass of
+the experiment prototypes of the hybrid structure have areduction of 21.37%, in comparison with the total mass of
+the prototypes of the AA structure. The result is close to the
+abovementioned theoretical result 24.32% and show that the
+hybrid structure design is relatively accurate.
+To verify the validity of the optimization and the energy-
+saving objective of the lightweight robotic arm, the robot
+prototype with hybrid structures is made to compare with that
+of the robot prototype made of AA structures.
+In the comparison of dynamic characteristics, the tra-
+jectories are necessary for calculation and measurement of
+the torque. The robotic arm is conducted in four motions,
+which result from two types of installations and two motions
+for each installation. In the measurement and calculation,
+the maximum required torque of the joint 1 occurs in the case
+of wall installation, while the maximum required torques of
+joints 24 occur in the case of ground installation. In addition
+to the positions of trajectories listed in Table 2, the velocities
+and accelerations of trajectories at starting and ending times
+are assumed as zero for smooth motions.
+B. EXPERIMENTAL RESULTS ON TORQUES
+Based on the prototype of hybrid structures and other parts
+used in the AA robotic arm, we can build an experimental pro-
+totype of the lightweight robotic arm with hybrid structures.
+Figure 12 shows the two versions experimental prototypes,
+which perform the same control action for comparison, and
+the measurement scheme of torques using the EPOS-studio in
+PC. The torque values of joints are obtained by transforming
+the current data, which are exported from the drivers of the
+motors by using USB cables. The transformation formula is
+represented byV
+i(t)DKTiImi(t)ig; iD1;2;3;4; (19)
+whereandigare the average efciency and reduction ratio
+respectively, while Imi(t) and KTiare the measured current
+values and torque constant respectively. And i(t) represents
+the torque of the ith joint.
+The torque constants of the four Maxon motors used in
+the drivetrains are KT1DKT2D91 mNm/A, KT3D
+30:5 mNm/A, and KT4D36:9 mNm/A. In this analysis,
+the average efciency and reduction ratio igof drivetrains
+VOLUME 7, 2019 64941
+H. Yin et al.: Hybrid Structure Design of Lightweight Robotic Arms Based on CFRP and AA
+FIGURE 13. Experimental and theoretical results of torques for four joints.
+are used as 0.76 and 120 according to the data from catalog
+of motors and gears. The measured current values and its
+root mean square (RMS) are transformed into experimentaltorques ( ) and the corresponding RMS (u d) for CFRP/AA
+arm (blue lines) as shown in Fig. 13. In the measurement,
+the experimental prototype tracks the same trajectories as the
+64942 VOLUME 7, 2019
+H. Yin et al.: Hybrid Structure Design of Lightweight Robotic Arms Based on CFRP and AA
+TABLE 8. Experimental RMS Of torques for the both versions prototypes
+and comparison results (uint: N·m).
+simulation, and the RMS of measured torques are 15.65 Nm,
+18.09 Nm, 10.45 Nm, and 2.37 Nm, respectively, which are
+used to compare with the analytical results. Figure 13 also
+depicts the analytical torques and their RMS for CFRP/AA
+arm (pink and green lines) in simulation, and the RMS of
+calculated torques are 15.31 Nm, 19.02 Nm, 10.11 Nm,
+and 2.299 Nm, respectively. It is observed that the errors
+between the analytical and experimental RMS of torques are
+ 2.22%, 4.89%, 3.36%, and 3.09%, respectively. The
+absolute values of errors are less than 5% and imply that the
+calculation and optimization of the lightweight robotic arm
+are relatively accurate.
+All the theoretical and experimental RMS of torques are
+less than the rated values of the selected components, which
+are 21.342 Nm, 21.342 Nm, 11.674 Nm, and 2.462 Nm as
+illustrated in Table 1. The comparisons imply that the design
+method is valid and the experimental prototype is safe.
+Moreover, the experimental RMS of torques of the
+CFRP/AA prototype are compared with that of the AA pro-
+totype, which are also depicted as black lines in Fig. 13.
+Table 8 lists the experimental values of the both prototypes
+and comparison results. The experimental RMS of all joints
+torques of the CFRP/AA prototype are less than the cor-
+responding value of the AA prototype, and the CFRP/AA
+prototype has a reduction of 5.4%, 5.7%, 1.1%, and 0.4% of
+experimental RMS for four joints, respectively. As a result,
+the optimal prototype with CFRP/AA hybrid structures can
+provide the operation with lower energy-consumption than
+the optimal prototype with AA structures under the action of
+the same working tasks.
+1) EXPERIMENTAL RESULTS ON STIFFNESS CONDITIONS
+In addition, the lightweight design makes the robotic arm
+become exible, thus, the stiffness of the designed robotic
+arms are necessary to check. To validate the stiffness condi-
+tions in the design of robotic arms, a series of experiments on
+modal frequency and deection measurement are achieved.
+The lightweight design results in large deformation
+of the robotic arm at end-effector. So the deections
+at the end-effectors of the both versions robotic arms
+are measured by using the ICP accelerometer (356A03)
+and data-acquisition instrument (SEMENS LMS SCADAS)
+shown in Fig. 14(a) and (b). The measuring schematic is
+shown in Fig. 14(c) and the measured accelerations are trans-
+formed into displacements through the LMS Test. Lab.
+FIGURE 14. Experimental prototypes with accelerometer for (a) AA arm,
+(b) CFRP/AA arm, and (c) schematic of deflection measurement.
+FIGURE 15. Accelerations (A) and displacements (D) of deflections for
+two versions arms in local frame {4}.
+Figure 15(a) shows the accelerations of deections for the
+both versions robotic arms in local coordinate frame {4},
+which can be transformed into local displacements shown
+in Fig. 15(b) by integral calculation. The local displacements
+of deections are transformed into the corresponding global
+values by using the following formulaV
+0DD0T4(q)4D (20)
+where0DD[0Dx;0Dy;0Dz] and4DD[4Dx,4Dy,
+4Dz] are the global and local displacements of deections,
+VOLUME 7, 2019 64943
+H. Yin et al.: Hybrid Structure Design of Lightweight Robotic Arms Based on CFRP and AA
+TABLE 9. Maximum global displacements of deflections for the both
+CFRP/AA and AA prototypes.
+TABLE 10. Modal frequencies of CFRP/AA and AA prototypes (unit: Hz).
+respectively,0T4is the homogeneous transformation matrix,
+andqis the vector of the joint trajectory.
+The maximum displacements of deections in the global
+coordinate frame {0} for the both CFRP/AA and AA robotic
+arms are obtained and listed in Table 9. All the displacements
+of deections in three directions are less than the allowable
+value of deformation daD0:6 mm used in the optimization.
+The results imply that the designed lightweight robotic arm
+meets the stiffness requirements. Moreover, the maximum
+vibrations displacements appear in z0direction, the result
+reect the inuence of load. The CFRP/AA robotic arm has
+a reduction of 22% of the maximum vibration displacement
+inzodirection by comparing with the AA robotic arm. The
+results imply that the CFRP/AA robotic arm possess larger
+stiffness and higher positioning accuracy than the AA robotic
+arm.
+In addition, based on these data of vibration displacement
+inzodirection, the frequency-domain spectra of the robot
+prototypes are obtained by fast Fourier transformation (FFT).
+The rst frequencies of the CFRP/AA prototype and the AA
+prototype are listed in Table 10, and the rst frequency of
+the CFRP/AA prototype increase 10.26% than that of the AA
+prototype. As a result, the CFRP/AA robotic arm can provide
+lower amplitude of vibration and higher natural frequency
+than the AA prototype.
+VI. CONCLUSIONS
+A hybrid structure design was proposed to optimize
+lightweight robotic arms. In this method, the CFRP and AA
+materials were used to build composite components, which
+replace the upper arm and forearm in the previously designed
+AA robotic arm. The CFRP and AA material modules were
+simultaneously optimized to obtain the optimal conguration
+under specic structure strength and dynamic performance
+constraints by using NSGA-II algorithm. Thus, the hybrid
+structure design has a reduction of 24.32% of the total mass
+of the both arms by comparing with the AA structure design.
+On the basis of the optimal results, the robotic arm with
+hybrid structure prototype was built and three experimentson joint torques, deections and frequency of the designed
+robotic arm were implemented to validate the optimiza-
+tion. Comparing with that of the AA prototype, the maxi-
+mum reduction rate of joint torque was 5.7%, the vibration
+displacements of deections at end-effector reduced 22%
+and the rst natural frequency of the CFRP/AA prototype
+increased up to 19.88 Hz. Those analysis results imply that
+the robotic arm with hybrid structures can provide lower
+energy consumption, higher motion precision, and better
+dynamic performance than the AA prototype.
+The hybrid structure design can improve lightweight and
+energy saving level, and dynamic performance for the robotic
+arms, which are used in service industry. However, the design
+variables of stacking sequences were searched in limited
+values, therefore, the winding process and its reliability in
+joint housing due to the heat inuence from drivetrains will
+be part of our further research.

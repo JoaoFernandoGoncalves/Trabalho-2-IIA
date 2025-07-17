@@ -1,0 +1,726 @@
+Received July 30, 2019, accepted August 23, 2019, date of publication September 2, 2019, date of current version September 18, 2019.
+Digital Object Identifier 10.1 109/ACCESS.2019.2939050
+Intelligent Control Strategy for Robotic Arm by
+Using Adaptive Inertia Weight and Acceleration
+Coefficients Particle Swarm Optimization
+TZUU-HSENG S. LI
+1, (Member, IEEE), PING-HUAN KUO
+2, YA-FANG HO1,
+AND GUAN-HONG LIOU1
+1aiRobots Laboratory, Department of Electrical Engineering, National Cheng Kung University, Tainan 701, Taiwan
+2Computer and Intelligent Robot Program for Bachelor Degree, National Pingtung University, Pingtung 90004, Taiwan
+Corresponding author: Ping-Huan Kuo (phkuo@mail.nptu.edu.tw)
+This work was supported by the Ministry of Science and Technology, Taiwan, under Grant MOST 106-2218-E-153-001-MY3 and
+Grant MOST 106-2221-E-006-009-MY3.
+ABSTRACT This paper proposes an intelligent control strategy for enabling a robotic arm to grasp and
+place water-lled bottles without spilling any of the water. First, the system architecture of a ve-degree-
+of-freedom robotic arm and its mechanical design are introduced. Second, both the forward and inverse
+kinematics of the robotic arm are derived. The study conducted an experiment in which the designed and
+implemented robotic arm could grasp a bottle of water and move it to another place. However, if the
+acceleration or the orientation of the robotic arm were inappropriate, the water in the bottle may be spilled
+during the movement. Therefore, the proposed strategy applies an inertial measurement unit for obtaining
+relevant information. According to the obtained information, the velocity curves of each joint could be
+optimized by adaptive inertia weight and acceleration coefcients particle swarm optimization. Finally,
+the experimental results demonstrated the feasibility and effectiveness of the proposed method.
+INDEX TERMS AIWCPSO, intelligent control, robotic arm, velocity control.
+I. INTRODUCTION
+In recent years, industrial automation has attracted atten-
+tion worldwide and has been actively promoted. Robots
+play an essential role in industrial automation. Software and
+hardware related to robots have been upgraded constantly,
+and robots with incrementally superior capacities have been
+invented. Robots can assist humans in tasks or conduct haz-
+ardous tasks for humans. Therefore, robots are also crucial
+for humans.
+Industrial robots primarily exist in the form of robotic
+arms. In the early stage of commercial robotics, robotic
+arms were used in various industrial manufacturing tasks,
+and currently, their application scopes have expanded. From
+the deployment of the rst robotic arm to current industrial
+robots, related technology has improved and still contin-
+ues to improve. Academics have published numerous stud-
+ies on robotic arms. Various technology companies devote
+effort and resources to researching and developing robotic
+The associate editor coordinating the review of this manuscript and
+approving it for publication was Jinguo Liu.arms [1][5]. With advancements in software and hardware
+technology, computer processors have been miniaturized, but
+their performance levels have increased substantially. Over
+the past few years, the computation speed of processors has
+doubled. Additionally, motor technology and performance
+have advanced. Advancements in various elds have necessi-
+tated the expansion of robotic arm applications. The capabil-
+ity of robotic arms has been improved. Initially, robotic arms
+could only move objects. Currently, they can conduct more
+difcult tasks such as welding.
+Different situations have different demands for robotic
+arms. To date, robotic arms have been applied in various
+elds. The researchers in [6] proposed a high-speed and
+lightweight robotic arm for playing badminton. In [7], a two-
+degree-of-freedom (DOF) fabric-based soft robotic arm was
+developed for grasping objects. Moreover, the authors in [8]
+produced a robotic arm for edge-rolling manipulation by
+proposing a grasp planning approach. In [9], a control method
+that enables a mechanical arm to ip burgers was proposed.
+The researchers in [10] utilized shape memory alloy coils
+to produce a soft robotic arm. A study [11] presented an
+VOLUME 7, 2019This work is licensed under a Creative Commons Attribution 4.0 License. For more information, see http://creativecommons.org/licenses/by/4.0/126929
+T.-H. S. Li et al.: Intelligent Control Strategy for Robotic Arm by Using AIWCPSO
+innovative, humorous humanoid robot that could produce
+quick-and-wide arm motions.
+Research has also investigated robotic arm control. For
+example, the researchers in [12] used H 1control design for
+motion control in elastic-joint robots and yielded favorable
+results. In [13], an adaptive impedance control method based
+on the concept of reinforcement learning was proposed; the
+proposed controller was applied to humanrobot coopera-
+tion. The results demonstrated the effectiveness of the pro-
+posed controller in for performing cooperative humanrobot
+tasks. The researchers in [14] proposed a multi-objective
+optimization method for position control of an arm mod-
+ule; the proposed method was effective and contributed to
+the development of an assistive device. Another study [15]
+proposed the application of a physicalvirtual impedance
+control system to a dual-arm aerial manipulator; the study
+achieved favorable results. Research has also been conducted
+on collision estimation for robots working with humans.
+For example, a study [16] proposed a method that involves
+the projection of a human arm motion into the robot's path
+as a preventive measure; this contributed to future human
+machine cooperation. To resolve various problems such as
+collisions, joint limits, and singularities, another study [17]
+proposed haptic guidance methods for a dual-arm system
+that achieved favorable verication. In [18], a stable control
+framework was proposed and applied to a lightweight dual-
+arm robot. The experimental results showed that this frame-
+work could achieve favorable results even under conditions
+of high uncertainty.
+During the use of a robotic arm to grasp objects, velocity
+control and endpoint angle settings are critical. In the present
+study, for example, when a robotic arm was used to move a
+liquid-lled bottle in 3 s, the liquid spilled. The spillage can
+be ascribed to two main reasons. First, during the movement
+process, the gripper was not horizontal; it was tilted slightly.
+Second, the velocity allocation during the movement process
+was inadequate. In the process of moving an object in a short
+period, maximum acceleration tends to be excessively large,
+causing the surface of the water to shake excessively and thus
+resulting in water spillage.
+To resolve this problem, this study proposes a smart
+control strategy for a robotic arm. The strategy involves a
+relatively modest learning process that leads to substantial
+improvement. A robotic arm with a total length and weight
+of 66.01 cm and 2.7 kg, respectively, was applied in this
+study. Iterative design and improvement produced a rigid
+robotic arm whose weight could be sustained by the available
+motors.
+Particle swarm optimization (PSO) has an extensive appli-
+cation range [19][26]. This method has been expanded to
+various forms, such as linear time-varying PSO [27], random
+PSO [28], rank-based PSO [29], increasing PSO [30], adap-
+tive inertia weight PSO (AIWPSO) [31], and AIWCPSO [32],
+where AIWCPSO was adopted from AIWPSO. Studies have
+argued that AIWCPSO has superior learning effectiveness.
+Accordingly, this study used the AIWCPSO method.
+FIGURE 1. Design of robotic arm mechanism.
+The smart control strategy was designed using
+AIWCPSO [32] and velocity curves. An inertial measure-
+ment unit (IMU) sensor located at the end of the machine
+arm transmit the status of the gripper during movement
+to the smart control system for calculation and learning.
+After multiple iterations of a learning loop, the motor at
+each joint can obtain an optimal velocity curve; thus, dur-
+ing the entire movement process, liquid spillage would not
+occur.
+The major contributions of this study are outlined as
+follows: 1) applying the AIWCPSO algorithm to obtain an
+optimal velocity control curve; 2) dening the velocity con-
+trol curve module for the robotic arm; 3) designing a robotic
+arm for the proposed intelligent control strategy; and 4) prov-
+ing the practicality and feasibility of the proposed velocity
+control strategy for the designed robotic arm.
+The rest of this paper is organized as follows. In Section II,
+the mechanisms of the robotic arm are discussed. The opti-
+mization algorithm used for the designed robotic arm is
+described in Section III. In Section IV, experimental results
+are presented to support the argument that the proposed
+control strategy is feasible and practical. Finally, Section V
+concludes this paper.
+II. MECHANISMS OF THE ROBOTIC ARM
+Fig. 1 illustrates the design of the robotic arm. The robotic
+arm has ve DOF. It contains seven dc servomotors. The total
+weight and length of the arm were measured to be 2.7 kg
+and 66.01 cm, respectively. The robot's metal components are
+composed of three metal types: 6061 aluminum alloy, 7075
+aluminum alloy, and stainless steel. Among the three metals,
+6061 aluminum alloy has the lowest density, followed by
+7075 aluminum alloy and then stainless steel. Because sheet
+metal components require bending, high-density materials
+are not suitable. Therefore, most of the sheet metal compo-
+nents are composed of 6061 aluminum alloy. By contrast,
+the metal components at the robotic arm's base that does
+not require bending are all composed of 7075 aluminum
+alloy, which is approximately as dense as stainless steel;
+therefore, it is both rigid and lighter relative to stainless steel
+of the same volume. Stainless steel constitutes the metal
+components near the robotic arm's base that does not require
+bending. Its high density results in excellent rigidity, and
+its weight is three times heavier than 7075 aluminum alloy
+of the same volume. Because stainless steel constitutes the
+metal components at the base, its weight rests directly on the
+desk and does not impose excessive burdens on the motors.
+126930 VOLUME 7, 2019
+T.-H. S. Li et al.: Intelligent Control Strategy for Robotic Arm by Using AIWCPSO
+FIGURE 2. Base and gripper design: (a) base and (b) gripper.
+To reduce the total weight of the robotic arm, the gripper
+and the gears are made of glass bers and reinforced
+plastics.
+Fig. 2 presents the design of the base and the gripper. The
+base must x the arm-connected extrusion to the desktop. The
+rst motor must support the weight of the entire robotic arm
+and must frequently rotate at high speed; hence, it is equipped
+with a thrust-bearing needle roller. When the motor rotates,
+the push force induces the needle to roll upward, minimizing
+friction and thus minimizing the loading of the motor.
+The motor to the gripper uses a 32-tooth gear, whereas
+the gripper uses a smaller 22-tooth gear. Therefore, the dc
+servomotor is required to rotate by only 62, and the gripper
+can change from an open position to a closed position to
+grasp objects. The gripper contains a thrust-bearing needle
+roller to sustain the weight of the held object. When the
+gripper is loaded, the friction caused by opening and closing
+is minimized. The bearing is in the robotic arm.
+Regarding the robotic arm mechanism, the dc servomotors
+connect metal components and have metal support designs
+to increase the rigidity of the arm joints in order to enhance
+stability.
+In the system framework, a notebook computer serves as
+the central processing system and is responsible for smart
+control strategy learning and computing, kinetic comput-
+ing, velocity curve design for the motors at each joint,
+acceleration sensing, and gyro information processing. Infor-
+mation detected by the sensors is transmitted to the cen-
+tral processing system in its entity. The smart control
+strategy applies this information to execute the learning
+process.
+Regarding the robotic arm control, the most crucial part
+is the communication between the robotic arm and the cen-
+tral processing system; specically, a communication system
+must be designed to precisely transmit orders, based on data
+calculated by the central processing system, to the robotic arm
+so that it can precisely implement ordered actions (Fig. 3).
+Accordingly, in the proposed strategy, USB2Dynamixel is
+used to transmit data between the robotic arm and the cen-
+tral processing system. A half-duplex transmission mode
+is applied, signifying that the two devices (notebook and
+arm) can conduct two-way data transmission. Moreover,
+only one device can transmit data at one time, and the
+FIGURE 3. Schematic of robotic arm hardware.
+other one must be in receiving mode. Therefore, during
+the control of robotic arms, if a motor is instructed to
+transmit its current state, the data transmission cycle would be
+long.
+The connection between the acceleration sensor, gyro, and
+central processing system is also critical. The learning pro-
+cess requires the sensor to transmit data. Therefore, contin-
+uous information transmission is established to accurately
+obtain the motion of the robotic arm at each time point.
+These data enable the smart control strategy to continue to
+learn about the accurate direction, nally presenting favor-
+able results.
+III. OPTIMIZATION ALGORITHM
+Eberhart and Kennedy developed the PSO algorithm inspired
+by the social behavior of bird ocking or sh schooling
+[33], [34]. These animals utilize their own experiences and
+refer to others' experiences to determine their direction.
+Therefore, the PSO algorithm has the advantages of rapid
+convergence and simple concept, and it has been widely
+adopted. The PSO has provided favorable solutions to numer-
+ous problems. However, this algorithm still has weaknesses.
+For example, it easily leads to local optimal solutions.
+Scholars have attempted to improve the PSO algorithm.
+Nichabadi et al. proposed the AIWPSO algorithm [31] that
+changes the original xed inertia weights to dynamic weights,
+in addition to adjusting the particle learning situation. The
+adaptive inertia weights are adjusted according to the updated
+particles of the previous generation. The acceleration param-
+eter is still a constant. This algorithm reduces the tendency of
+arriving at a local optimal solution and can lead to favorable
+learning results. The AIWCPSO algorithm is an improvement
+that is primarily based on the AIWPSO algorithm.
+Two types of the PSO algorithm are detailed in the follow-
+ing sections. The rst type is the standard PSO, in which the
+inertia weight and acceleration parameters are all constant.
+VOLUME 7, 2019 126931
+T.-H. S. Li et al.: Intelligent Control Strategy for Robotic Arm by Using AIWCPSO
+FIGURE 4. Schematic of PSO algorithm.
+The second type is the AIWCPSO algorithm, which is differ-
+ent from the standard PSO algorithm.
+A. STANDARD PSO
+Fig. 4 illustrates a schematic of the standard PSO algorithm.
+The operating procedure of this algorithm is divided into ve
+stages. The rst stage, involves particle initialization. In this
+stage, the location and velocity of each particle would be
+assigned a random number. The second stage entails calcu-
+lating a tness function according to the needs of the ques-
+tion. Every time a particle updates its location and velocity,
+the tness function determines the tness of that particle
+due to its movement. The third stage involves updating the
+personal best of each updated particle. The personal best of
+each particle is recorded. When the tness function exceeds
+the personal best, the personal best is updated. The fourth
+state entails updating the global best, which is the optimal
+solution of all particles. After the learning of each generation
+of particles, their personal best data are compared with the
+global best. If their data are superior to the global best,
+the global best is updated. The fth stage involves updating
+the velocity and location of each particle. The velocity is
+inuenced by the current velocity, personal best, and global
+best, as presented in (1). The location of a particle at the
+next time point is determined by the current location plus
+the velocity of the particle, as indicated in (2). The fth
+stage involves establishing a program termination condition.
+Different problems lead to different termination conditions,
+such as whether an error must be smaller than a tolerable
+error and whether a certain number of iterations has beenreached.
+V(tC1)DwV(t)Cc1rand 1(pbest X(t))
+Cc2rand 2(gbest X(t)) (1)
+X.tC1/DX.t/CV.tC1/ (2)
+where wis the inertia weight and c1andc2are acceleration
+parameters. These three parameters are constant during the
+PSO learning period. Moreover, rand 1andrand 2are random
+numbers between 0 and 1; pbest is the personal best, repre-
+senting the optimal location of a particle; gbest is the global
+best, derived from the optimal positions of all particles; V.t/
+is the current velocity of the particle; V.tC1/is the velocity
+of the particle at the next point in time; X(t) is the location
+of the particle at time t; and X.tC1/is the location of the
+particle at time tC1.
+B. AIWCPSO ALGORITHM
+Nickabadi et al. proposed the AIWPSO algorithm [31], which
+is an improvement of the PSO algorithm in that it transforms
+the constant inertia weight to a dynamic weight. The condi-
+tions in (3) are used for updating the personal best of each
+particle. If S.i;t/D1, then the personal best of a particle is
+updated; the personal best is not updated if S.i;t/D0. In (3),
+iis the particle number and tis the current iteration number.
+Ps.t/is the ratio of the total personal best of a current particle
+against the total number of particles; nis the total number of
+particles, as shown in (4). Equation (5) presents the principle
+for updating the inertial weight, where wminandwmaxare
+the self-determined minimum and maximum values of the
+weight, respectively, and range between 0 and 1. Equation (1)
+can be modied into (6):
+S.i;t/D(
+1;if tness 
+pbestt
+i
+>tness
+pbestt 1
+i
+0;otherwise
+(3)
+Ps.t/DnP
+iD1S.i;t/
+n(4)
+wa.t/D.wmax wmin/Ps.t/Cwmin (5)
+V(tC1)Dwa.t/V(t)Cc1rand 1(pbest X(t))
+Cc2rand 2(gbest X(t)) (6)
+Fig. 5 shows the owchart of the AIWCPSO algorithm.
+The AIWCPSO algorithm is based on the main structure
+of the AIWPSO algorithm; thus, it maintains the advantages
+of the AIWPSO algorithm, apart from modifying its accelera-
+tion parameters [27]. The difference between the AIWCPSO
+and PSO algorithms is that the AIWCPSO algorithm updates
+the global best as well as the location and velocity of each
+particle. The AIWPSO algorithm also updates the adaptive
+inertia weight and adaptive acceleration parameters, thus
+transforming c1andc2in the PSO algorithm through Ps.t/
+into the dynamic adaptive acceleration parameters a1.t/and
+a2.t/, as presented in (7). andare positive values deter-
+mined by users. Equation (6) can be modied to yield (8).
+126932 VOLUME 7, 2019
+T.-H. S. Li et al.: Intelligent Control Strategy for Robotic Arm by Using AIWCPSO
+FIGURE 5. Flowchart of AIWCPSO algorithm.
+Existing studies have shown that the AIWCPSO algorithm
+exhibited superior learning effects to the AIWPSO algorithm.
+(
+a1.t/D.Ps.t//C
+a2.t/D.1 Ps.t//C(7)
+V(tC1)Dwa.t/V(t)Ca1.t/rand 1(pbest X(t))
+Ca2.t/rand 2(gbest X(t)) (8)
+C. VELOCITY CURVE DESIGN
+One of the crucial components of smart control strategies
+is velocity curve design. Fig. 6 presents a velocity curve,
+where the x-axis represents normalized time. A robotic arm
+operated in accordance with this velocity curve accelerates
+from a static state to the point of maximum angular velocity
+and then gradually slows down to the static state. A velocity
+curve is mainly composed of an acceleration terminal point t1,
+deceleration starting point t2, and maximum angular velocity.
+The velocity curve of each motor differs and has different
+t1,t2, and!maxvalues. A velocity curve can be divided into
+three stages, each of which is described in (9), where 1in the
+rst stage is shown in (10) and 2in the third stage is shown
+in (11).
+8
+>><
+>>:!.t/D!max
+2.1 sin1/;0<tt1
+!.t/D!max; t1<tt2
+!.t/D!max
+2.2 sin2/;t2<t1(9)
+FIGURE 6. Velocity curves.
+1Dt
+t12 (10)
+2D1 t
+1 t22 (11)
+The velocity curve equation can be integrated to yield an
+equation of angular displacement 1, where1,t1, and
+t2are all known. Thus, the equation of maximum angular
+velocity!maxcan be derived. The equations are presented
+in (12)(16).
+1Dt1Z
+0!max
+2t
+t12 sint
+t12
+dt
+Ct2Z
+t1!maxdtC1Z
+t2!max
+21 t
+1 t22
+ sin1 t
+1 t22
+dt (12)
+1D0
+@!maxt2
+2t1C!maxt1cos
+2t
+t1
+421
+At1
+0
+C.!maxt/jt2t1
+C0
+@!max(1 t)2
+2.1 t2/
+C!max.1 t2/cos
+2(1 t )
+.1 t2/
+421
+A1
+t2(13)
+1D!maxt1
+2C!max.t2 t1/C!max.1 t2/
+2
+(14)
+1D!max.1Ct2 t1/
+2(15)
+!maxD(21)
+(1Ct2 t1)(16)
+VOLUME 7, 2019 126933
+T.-H. S. Li et al.: Intelligent Control Strategy for Robotic Arm by Using AIWCPSO
+D. AIWPSO PARAMETER SETTING
+One of the objectives of this study was to achieve
+favorable learning results though few iterations; therefore,
+the AIWCPSO algorithm was adopted. The number of iter-
+ations was set to 9, and the total number of particles was set
+to 7. The information of each particle included the accelera-
+tion end time and deceleration starting time of ve motors.
+The smart control strategy applies the AIWCPSO algo-
+rithm, with OPS serving as the main part with partial adjust-
+ment. The parameter settings in [32] were a wminvalue
+of 0 and wmaxvalue of 1. Therefore, the adaptive inertia
+weight can be calculated using (17). A large inertia weight
+is conducive to ensure that a particle searches an entire
+region, whereas a small inertia weight limits the scope of
+the regional search process. Regarding the derivation of the
+acceleration parameters, was set to 2.05 and was set to
+0.5; accordingly, the acceleration parameters could be derived
+as expressed in (18)
+wa.t/DPs.t/ (17)(
+a1D2:05.Ps.t//C0:5
+a2D2:05.1 Ps.t//C0:5(18)
+The goal of this study was to prevent shakiness due to
+acceleration and tilted grippers during the movement of the
+robotic arm, which would lead to spilling. Therefore, in our
+adaptive function design, we must consider four criteria: the
+peak values of the x-,y-, and z-axis accelerations as well as
+a summary of the differences between the gripper and the
+horizontal gesture at each time point, as shown in (19), as
+shown at the bottom of this page. The accelerations in all
+axes must be normalized to avoid the creation of an exces-
+sively small acceleration that would cause an extremely high
+adaptive value. A small acceleration peak means less shak-
+ing. Furthermore, if the gripper of the robotic arm could be
+consistently horizontal during task execution, liquid spillage
+due to the tilted gripper can be prevented.
+IV. EXPERIMENTAL RESULTS
+Fig. 7 shows the experimental setup of this study. The start
+points of the three experimental routes in this study were the
+No. 13 locations on the brown platform, whereas the end
+points were the No. 46 locations on the red platform. During
+the learning process in the smart control strategy, movements
+were repeatedly conducted and a considerable amount of
+water could be spilled due to the tilting of the robotic arm
+or inappropriate velocity curve; therefore, translucent bottles
+with caps were used to replace cups to prevent spillage. After
+the completion of an experimental process, the cap of the
+water bottle was unscrewed to demonstrate the differences
+FIGURE 7. Experimental setup.
+FIGURE 8. Flowchart of velocity design.
+between learned and unlearned situations. Furthermore, due
+to spoilage during the practice process, all prompts were
+made of waterproof materials.
+After dening the three routes, each of which was com-
+posed of locations with two coordinates, this study calcu-
+lated the motor angle of each joint by using reverse kinetics.
+Fig. 7 shows the relative position of all objects. Route 1
+involved taking up the water bottle from location No. 1 at
+(64.55, 14, 0) and moving it to location No. 4 at (4, 46.2,
+7.2). Route 2 involved taking up the water bottle from location
+No. 2 at (66.05, 0, 0) and moving it to location No. 5 at (38.6,
+32.4, 0.4). Finally, Route 3 involved taking up the water
+bottle from location No. 3 at (64.55, 14, 0) and moving it to
+location No. 6 at (41.9,  31.6, 7).
+The gripper must be horizontal at the start and end points.
+The gripper could rotate about the z-axis only. The grasping
+gesture matrix is presented in (20), where could be obtained
+from the aforementioned six coordinates. The values at
+the start and end points of Route 1 were 12:24and 85:05,
+respectively; those at the start and end points of Route 2 were
+0and 40:01, respectively; and those at the start and end
+tnessD1
+Acc x;maxCAcc y;maxCAcc z;maxCnP
+iD1Gyro(i) Gyro horizontal(19)
+126934 VOLUME 7, 2019
+T.-H. S. Li et al.: Intelligent Control Strategy for Robotic Arm by Using AIWCPSO
+points of Route 3 were  12:24and 37:02, respectively.
+RD2
+4cos./ sin./0
+sin./ cos./ 0
+0 0 13
+5 (20)
+A. EXPERIMENTAL PROCEDURES
+The smart control strategy involves the AIWCPSO algorithm
+and velocity curve design. The operating procedure of the
+strategy involves ve steps. The rst step entails applying
+the AIWCPSO algorithm to update the acceleration stopping
+time and the deceleration starting time of each joint and
+particle. The second step involves designing a velocity curve
+for movement. The owchart is illustrated in Fig. 8. Using
+reverse kinetics and the start and end points of each path,
+the system can obtain the initial and end angles of the motor
+of each joint, thereby obtaining the angular displacement of
+each motor. The point at the acceleration ending time and the
+deceleration starting time can be used to calculate the max-
+imum angular velocity. The third step entails implementing
+the designed velocity curve on the robotic arm. The IMU sen-
+sor transmits the information of the gripper. The fourth step
+involves using the transmitted information to calculate tness
+values according to four reference indicators: x-,y-, and
+z-axis maximum acceleration as well as the grasping ges-
+ture during the movement process. The nal step entails
+updating the personal best, global best, adaptive inertia
+weight, and adaptive acceleration parameters of the particles.
+Steps 15 are repeated until the preset number of iterations
+was reached.
+The proposed smart control strategy was veried by
+experiments in which a robotic arm grasped and placed a
+water-lled bottle by using three different routes. Regardless
+of distance, the robotic arm was required to complete the
+transfer within 3 s. Before the application of the smart control
+strategy, the robotic arm moved at an even speed. Without the
+smart strategy, at the beginning of the movement, the grip-
+per tilted and the arm moved at a considerably high speed,
+causing the arm to hit the platform and spill the water. Addi-
+tionally, when approaching its destination, the arm spilled
+the water again because of the large negative acceleration.
+These problems were corrected by the proposed smart control
+strategy.
+Each route was provided with three types of information:
+rst-generation particle and global best three-axis velocity
+curve graph, acceleration and gesture graph, and global best
+adaptive value graph. The x-axes of the three graphs represent
+time, with each unit representing 20 ms.
+B. TRAINING ROUTE 1
+Fig. 9 provides a breakdown of the movements along
+Route 1. Regarding the rst-generation iteration, Fig. 10
+illustrates the designed velocity curve for optimal particle
+velocity. The horizontal axis represents time, whereas the
+vertical axis represents the speed dial on the motor. The
+FIGURE 9. Motion breakdown along Route 1.
+FIGURE 10. First-generation particle velocity design along Route 1.
+(a) Motor 1, (b) Motor 2, (c) Motor 3, and (d) Motor 4.
+FIGURE 11. First-generation particle acceleration graph and gesture curve
+along Route 1. (a) x-axis acceleration curve, (b) y-axis acceleration curve,
+(c)z-axis acceleration curve, and (d) grasping gesture curve.
+calculated velocity is transmitted to central processing system
+that commands the robotic arm to move accordingly.
+Data transmitted from the IMU sensor on the gripper to the
+central processing system are graphed in Fig. 11. The three
+axial accelerations can be observed in Fig. 11. The x-axis
+represents time, and the y-axis represents acceleration. After
+the absolute value was taken, the peak accelerations in the x-,
+VOLUME 7, 2019 126935
+T.-H. S. Li et al.: Intelligent Control Strategy for Robotic Arm by Using AIWCPSO
+FIGURE 12. Global best velocity design for robotic arm along Route 1.
+(a) Motor 1, (b) Motor 2, (c) Motor 3, and (d) Motor 4.
+FIGURE 13. Global best acceleration curve and gesture curve along Route
+1. (a) x-axis acceleration curve, (b) y-axis acceleration curve, (c) z-axis
+acceleration curve, and (d) grasping gesture curve.
+y-, and z-axes were 0.32g, 0.42g, and 1.52g, respectively. The
+y-axis in Fig. 11(d) is demarcated in radians, with the 0 point
+signifying the gripper being horizontal. Therefore, during the
+movement of the robotic arm, the gripper was mostly tilted,
+leaving considerable room for improvement.
+Through multiple sessions of learning, the global best
+along Route 1 was obtained. Subsequently, velocity curves
+were used to design the most suitable velocity curve (Fig. 12).
+Fig. 13 illustrates data provided by the IMU sensor. The
+peak accelerations in the x- and y-axes were 0.41g and
+0.32g, respectively, but the accelerations in both axes were
+almost steady. The peak acceleration in the z-axis was 1.4g.
+As indicated in Fig. 13(d), the grasping gestures throughout
+the movement process were almost horizontal. As illustrated
+in Fig. 14, when the AIWCPSO system was learning, nine
+iterations were required for determining the global best,
+and the adapted value of the global best was substantially
+improved subsequently. The learning time was 19.32 min.
+The grasping gesture reected clear differences.
+C. TRAINING ROUTE 2
+Fig. 15 presents a breakdown of the movement of the robotic
+arm along Route 2. Fig. 16 presents the designed velocity
+FIGURE 14. Learning curve for global best adaptive value along Route 1.
+FIGURE 15. Movement along Route 2.
+FIGURE 16. First-generation particle velocity designs along Route 2.
+(a) Motor 1, (b) Motor 2, (c) Motor 3, and (d) Motor 4.
+curve for optimal particle velocity in the rst-generation
+iteration. The horizontal axis represents time, whereas the
+vertical axis represents the speed dial on the motor.
+Data transmitted from the IMU sensor on the gripper are
+shown in Fig. 17. The x-axis represents time, and the y-axis
+represents acceleration. The axial accelerations on the three
+axes are shown in the gure. The peak accelerations in the
+x-,y-, and z-axes were 0.31g, 0.41g, and 1.49g, respectively.
+As indicated in Fig. 17(d), the gripper tilted severely.
+126936 VOLUME 7, 2019
+T.-H. S. Li et al.: Intelligent Control Strategy for Robotic Arm by Using AIWCPSO
+FIGURE 17. First-generation particle acceleration curves as well as
+gesture curve along Route 2. (a) x-axis acceleration curve, (b) y-axis
+acceleration curve, (c) z-axis acceleration curve, and (d) grasping gesture
+curve.
+FIGURE 18. Global best velocity designs along Route 2. (a) Motor 1,
+(b) Motor 2, (c) Motor 3, and (d) Motor 4.
+Fig. 18 illustrates the global best velocity curve along
+Route 2. Data from the IMU are shown in Fig. 19. The
+peak accelerations in the x- and y-axes were 0.27g and
+0.28g, respectively, whereas the acceleration in the z-axis was
+mostly between 0.9g and 1.1g. The radian values in Fig. 19(d)
+are mostly 0, showing that the gripper maintained a hori-
+zontal orientation. Fig. 20 reveals the learning curve of the
+AIWCPSO algorithm for determining the global best. After
+a few iterations, the global best adaptive value improved by
+tenfold or more. The total learning time was 19.30 min. The
+gripper maintained a horizontal orientation, and the acceler-
+ations in the three axes approached stability. The control of
+peak acceleration in the y-axis was outstanding.
+D. TRAINING ROUTE 3
+Fig. 21 shows a breakdown of the robotic arm movements
+along Route 3. Fig. 22 presents the designed velocity curve
+for optimal particle velocity in the rst-generation iteration.
+The horizontal axis represents time, whereas the vertical axis
+represents the speed dial on the motor.
+FIGURE 19. Global best acceleration curves and gesture curve along
+Route 2. (a) x-axis acceleration curve, (b) y-axis acceleration curve,
+(c)z-axis acceleration curve, and (d) grasping gesture curve.
+FIGURE 20. Learning curve for global best adaptive value along Route 2.
+FIGURE 21. Movement along Route 3.
+During the movement of the robotic arm, data were trans-
+mitted in real time from the IMU sensor. The transmitted data
+are depicted in Fig. 23. The x-axis represents time, and the
+y-axis represents acceleration. The accelerations in the three
+axes can be observed in the gure. The peak accelerations in
+thex-,y-, and z-axes were 0.25g, 0.17g, and 1.42g, respec-
+tively. As indicated in Fig. 23(d), the gripper tilted during the
+movement process.
+VOLUME 7, 2019 126937
+T.-H. S. Li et al.: Intelligent Control Strategy for Robotic Arm by Using AIWCPSO
+FIGURE 22. First-generation particle velocity designs along Route 3.
+(a) Motor 1, (b) Motor 2, (c) Motor 3, and (d) Motor 4.
+FIGURE 23. First-generation particle acceleration curves and gesture
+curve along Route 3. (a) x-axis acceleration curve, (b) y-axis acceleration
+curve, (c) z-axis acceleration curve, and (d) grasping gesture curve.
+The global best along Route 3 was achieved by the third
+particle in the ninth generation. The system designed the
+velocity curve for optimal velocity along Route 3 (Fig. 24).
+Fig. 25 illustrates the IMU data, in which the accelerations in
+the three axes can be observed. The peak accelerations in the
+x-,y-, and z-axes were 0.27g, 0.17g, and 1.48g, respectively.
+Fig. 25(d) reveals that all radian values are almost 0 for
+the entire process, indicating that the gripper maintained a
+horizontal orientation. Fig. 26 presents the learning curve
+of the AIWCPSO algorithm for determining the global best.
+The global best adaptive value improved substantially. The
+learning time was 19.29 min. Along Route 3, the grasping
+gesture improved signicantly.
+E. APPLICATION OF GRASPING WATER-FILLED BOTTLES
+The learning process of the smart control strategy was applied
+to a robotic arm grasping water-lled bottles and moving
+them on the three routes. Although each of the bottles was
+lled to a height of 1 mm from the top, signifying a nearly
+full bottle, water was not spilled during the movement pro-
+cess. Clearly, the smart control strategy yielded substantial
+FIGURE 24. Global best velocity designs along Route 3. (a) Motor 1,
+(b) Motor 2, (c) Motor 3, and (d) Motor 4.
+FIGURE 25. Global best acceleration curves and gesture curve along
+Route 3. (a) x-axis acceleration curve, (b) y-axis acceleration curve,
+(c)z-axis acceleration curve, and (d) grasping gesture curve.
+FIGURE 26. Learning curve for global best adaptive value along Route 3.
+improvement because the gripper of the robotic arm main-
+tained an excellent horizontal gesture. The system optimized
+inhibition of maximum acceleration and stabilized the three-
+axis acceleration.
+The following gures depict the processes of grasping
+and moving the water-lled bottles along the three routes.
+126938 VOLUME 7, 2019
+T.-H. S. Li et al.: Intelligent Control Strategy for Robotic Arm by Using AIWCPSO
+FIGURE 27. Grasping and movement of water-filled bottle along Route 1.
+FIGURE 28. Gasping and movement of water-filled bottle along Route 2.
+FIGURE 29. Gasping and movement of water-filled bottle along Route 3.
+Figs. 27, 28, and 29 depict the movements along
+Routes 1, 2, and 3, respectively.
+This section introduces the experimental environment,
+the owchart of the smart control strategy, velocity curve
+design, AIWCPSO parameter settings, and grasping and
+movement of water-lled bottles. Regarding the grasping of
+the water-lled bottles, three learning routes are described in
+this section, along with information regarding acceleration,
+velocity curves, and grasping gesture. The application ofresults obtained from the learning process of the smart control
+strategy is also demonstrated.
+After observing the x-,y-, and z-axis accelerations through-
+out the movement process, this study applied the proposed
+smart control strategy to reduce most of the excessively
+large accelerations, resulting in stabilized accelerations. The
+most obvious learning effect was in the robotic arm grasping
+gesture during the movement process. Before the learning
+process, the gripper was tilted throughout the process, but
+after the learning process, the gripper was almost always hor-
+izontal through the process. The whole experimental video
+can be accessed in [35].
+V. CONCLUSION
+This study has presented an intelligent control strategy and
+applied it to a self-made robotic arm to grasp and place
+water-lled bottles. The proposed intelligent control strategy
+adopted the AIWCPSO algorithm along with velocity curve
+design. The main goal of the experiments in this paper is
+to determine the optimal solution to overcome the problem
+of moving water-lled containers. After the learning process
+mentioned in the previous sections, the grasping gesture can
+be substantially improved; the gripper can also maintain a
+horizontal gesture during the movement process. Addition-
+ally, the accelerations in the x-,y-, and z-axes have been
+stabilized, and their peaks have been reduced. The results of
+this study demonstrate the feasibility and effectiveness of the
+proposed intelligent control strategy.

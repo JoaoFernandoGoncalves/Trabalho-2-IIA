@@ -2,20 +2,31 @@ import os
 import string
 import nltk
 from PyPDF2 import PdfReader
+from collections import Counter
 
-
+# Busca os artigos em pdf
 diretorio_artigos = os.path.join(os.getcwd(), 'Artigos')
 arquivos = os.listdir(diretorio_artigos)
 
 artigos = [i for i in arquivos if i.lower().endswith('.pdf')]
 
+# Cria uma pasta para armazenar os artigos crus no formato txt
+pasta_txt = os.path.join(os.getcwd(), "Artigos_txt")
+os.makedirs(pasta_txt, exist_ok=True)
+
+""" 
+# Usada para teste apenas
+# Cria uma pasta para armazenar os artigos sem referência no formato txt
+pasta_txt_sreferencias = os.path.join(os.getcwd(), "Artigos_SReferencias_txt")
+os.makedirs(pasta_txt_sreferencias, exist_ok=True)
+"""
 # Definição de um dicionário para armazenar o texto dos artigos
 texto_artigos = {}
 
 # Leitura dos artigos em PDF
 for nome_artigo in artigos:
     caminho_artigo = os.path.join(diretorio_artigos, nome_artigo)
-    print(f"Lendo artigo: {nome_artigo}")
+    print(f"\nLendo artigo: {nome_artigo}")
     leitor = PdfReader(caminho_artigo)
 
     texto = ""
@@ -27,6 +38,14 @@ for nome_artigo in artigos:
     # Armazena o texto lido do artigo no dicionário referente ao nome do artigo
     texto_artigos[nome_artigo] = texto
 
+    nome_txt = nome_artigo.replace(".pdf", ".txt")
+    caminho_txt = os.path.join(pasta_txt, nome_txt)
+    
+    with open(caminho_txt, "w", encoding="utf-8") as f:
+        f.write(texto)
+
+print("\n")
+
 # Etapa de pré-processamento dos artigos
 nltk.download('punkt')
 nltk.download('punkt_tab')
@@ -37,11 +56,39 @@ nltk.download('wordnet')
 lematizador = nltk.WordNetLemmatizer()
 stop_words = set(nltk.corpus.stopwords.words('english'))
 
+# Etapa para remover as referências bibliograficas
+marcadores_referencia = ["REFERENCES", "R EFERENCES", "R\nEFERENCES"]
+
+for nome_artigo, texto in texto_artigos.items():
+    print(f"\nRemovendo referências em: {nome_artigo}...")
+    
+    # Por padrão, considera o texto inteiro
+    texto_limpo = texto
+    
+    for marcador in marcadores_referencia:
+        indice = texto.find(marcador)
+        if indice != -1:
+            # Corta o texto até o marcador
+            texto_limpo = texto[:indice]
+            print("Seção de referências encontrada e removida.")
+            break
+    
+    # Salvar o texto sem referencia no dicionário de artigos
+    texto_artigos[nome_artigo] = texto_limpo 
+
+    # Atualiza os artigos txt para os txt sem referencias
+    nome_txt = nome_artigo.replace(".pdf", ".txt")
+    caminho_txt = os.path.join(pasta_txt, nome_txt)
+    
+    with open(caminho_txt, "w", encoding="utf-8") as f:
+        f.write(texto_limpo)
+    
+print("\n")
 # Definição de um dicionário para armazenar os artigos processados
 artigos_processados = {}
 
 for nome_artigo, texto in texto_artigos.items():
-    print(f"Processando artigo: {nome_artigo}")
+    print(f"\nProcessando artigo: {nome_artigo}")
 
     # Converte o texto para minúsculas
     texto = texto.lower()
@@ -75,3 +122,29 @@ for nome_arquivo, tokens in artigos_processados.items():
 
     with open(caminho_txt, "w", encoding="utf-8") as f:
         f.write(" ".join(tokens))
+
+print("\n")
+
+# Etapa de encontrar os 10 termos mais recorrentes em todos os artigos
+
+# Uni todos os tokens de artigos em um só vetor
+todos_tokens = []
+for tokens in artigos_processados.values():
+    todos_tokens.extend(tokens)
+
+# Cria o Bag-of-Words utilizando a função counter
+bag_of_wordsAux = Counter(todos_tokens)
+
+# Filtra o bag_of_words
+bag_of_words = Counter({
+    termo: freq
+    for termo, freq in bag_of_wordsAux.items()
+    if termo not in ["fig", "time"] and not termo.isdigit()
+})
+
+# Obter os 10 termos mais recorrentes
+termos_recorrentes = bag_of_words.most_common(10)
+
+print("\nOs 10 termos mais recorrentes nos artigos:")
+for termo, frequencia in termos_recorrentes:
+    print(f"{termo}: {frequencia} ocorrências")

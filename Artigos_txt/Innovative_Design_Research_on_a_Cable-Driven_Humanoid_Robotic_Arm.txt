@@ -1,0 +1,567 @@
+Innovative Design Research on  a Cable-Driven 
+Humanoid Robotic Arm  
+Zhiyuan Wu  
+1.State Key Laboratory of
+Tribology,  Department of
+Mechanical Engineering,
+Tsinghua University  
+2.Beijing Key Lab of
+Precision/Ultra -precision 
+Manufacturing Equipment  and 
+Control, Department of 
+Mechanical Engineering, 
+Tsinghua University  
+Beijing , China  
+zy-wu20@mails.tsinghua.edu.c n Ye Huo 
+1.State Key Laboratory of
+Tribology,  Department of
+Mechanical Engineering,
+Tsinghua University  
+2.Beijing Key Lab of
+Precision/Ultra -precision 
+Manufacturing Equipment  and 
+Control, Department of 
+Mechanical Engineering, 
+Tsinghua University  
+Beijing , China  
+huoy21@mails.tsinghua.edu.cn  Kangji Ma  
+1.State Key Laboratory of
+Tribology,  Department of
+Mechanical Engineering,
+Tsinghua University  
+2.Beijing Key Lab of
+Precision/Ultra -precision 
+Manufacturing Equipment  and 
+Control, Department of 
+Mechanical En gineering, 
+Tsinghua University  
+Beijing , China  
+mkj21@mails.tsinghua.edu.cn  Yuanzeng  Song 
+1.Northwestern Polytechnical
+University , Shaanxi , China
+2.Commercial Aircraft
+Corporation of China Ltd , 
+Shanghai, China  
+songyuanzeng@comac.cc  
+Haiyan Sun  
+1.Chengdu -Chongqin Economic
+Circle ( Luzhou)  Advanced
+Technology Research Institute
+Luzhou, Sichuan , China  
+13811769703@139.com  Huaizhi  Cao 
+1.Chengdu -Chongqin Economic
+Circle ( Luzhou)  Advanced
+Technology Research Institute  
+Luzhou, Sichuan , China  
+13811769703@139.com  Zhufeng Shao*  
+1.State Key Laboratory of
+Tribology,  Department of
+Mechanical Engineering,
+Tsinghua University  
+2.Beijing Key Lab of
+Precision/Ultra -precision 
+Manufacturing Equipment  and 
+Control, Department of 
+Mechanical Engineering, 
+Tsinghua University  
+Beijing , China  
+shaozf@mail.tsinghua.edu.cn  
+Abstract—The humanoid robotic arm aims to achieve multi -
+dimensional comprehensive similarity with the human arm in 
+kinematics, dynamics, and physiological structure, in order to 
+enhance human -robot collaboration capabilities and skill learning 
+efficiency, and to realize the in -situ replacement of manual 
+operations, holding broad application prospects. In response to the 
+demands of human -robot interaction and unstructured 
+environment perception, this paper, based on the analysis of the 
+human skeletal structure and muscle driving characteristics, and 
+conside ring the enveloping effect of ligaments and driving muscles 
+on human joints, proposes a joint configuration driven by cables 
+arranged along a spherical surface, completing the configuration 
+design of the cable -driven humanoid robotic arm. Using spherical 
+projection, the kinematic modeling of each joint of the cable -
+driven humanoid robotic arm is completed, and the kinematic 
+performance, including workspace, is verified. The shoulder joint 
+can achieve an inclination angle of at least 108°  in any direction, 
+with a spin angle range of at least 180° ; the elbow joint has a 
+movable range of 133° ; the wrist joint can achieve an inclination 
+angle of at least 49.5°  in any direction, with a spin angle range of 
+at least 180° , which is similar to the workspace of the hu man arm.  
+Keywords —Humanoid Robotic Arm, Parallel Mechanism, 
+Mechanical Design,  Kinematics . I.INTRODUCTION 
+With the development of modern industry, robotic arms have 
+been widely used in multiple fields. Humanoid robotic arms, 
+with their similarities to human  arms, have shown high 
+interactive performance with humans and are highly favored in 
+fields that require intense human in teraction, such as healthcare 
+[1][2][3], human -robot interaction [4][5], and entertainment 
+[6][7 ]. 
+The human arm has a total of seven d egrees of freedom: 
+three at the shoulder joint, with ranges of approximately 190°  to 
+200°  for flexion and extension, as well as abduction and 
+adduction, and approximately 90°  to 120°  for external and 
+internal rotation; one at the elbow joint, with a range of about 
+130°  to 140° ; one in the forearm, with a range of about 160°  to 
+180° ; and two at the wrist joint, with a range of about 140°  for 
+flexion and extension, and about 40°  to 50°  for abduction and 
+adduction . The human arm possesses characteristics such as 
+high degrees of freedom, low inertia, large workspace, and high 
+dynamic capabilities. Therefore, the driving and transmission 
+scheme of humanoid robotic arms is very important. Cable -
+driven systems have natural advantages in terms of 
+miniaturization, li ghtness, flexibility, and precision [ 8], and they 
+share a high similarity with human tendons in terms of force and 
+428
+979-8-3503-5030-2/24/$31.00 ©2024 IEEE2024 9th International Conference on Automation, Control and Robotics Engineering (CACRE) | 979-8-3503-5030-2/24/$31.00 ©2024 IEEE | DOI: 10.1109/CACRE62362.2024.10635090
+
+motion transmission, promising to achieve driving mechanisms 
+and kinematics sim ilar to humans, significantly improving the 
+overall performance of humanoid robotic arms.  
+In the existing joint designs of cable -driven humanoid 
+robotic arms, the design direction can be broadly classified into 
+two categories. One category seeks similarity  with the human 
+arm in terms of skeletal structure and driving mechanism, 
+imitating the human skeletal structure to design the basic 
+configuration of the robotic arm, and treating cables as human 
+muscles, imitating the arrangement of hu man muscles for cabl e 
+layout [ 9][10][11 ]. Due to the redundancy and complexity of 
+human muscles, such designs often cannot perfectly replicate the 
+arrangement of human muscles, leading to deficiencies in 
+workspace and dynamic characteristics. These designs usually 
+have relati vely simple configuration designs and do not have the 
+conditions for complex cable layout, and since human muscles 
+are mostly driven by direct traction, such designs typically use a 
+direct pull cable configuration. However, direct pull cables have 
+a larger  dynamic volume and require avoiding interference 
+between cables and between cables and mechanisms [ 12], 
+especially in the design of the shoulder joint, which is difficult 
+to achieve a workspace similar to that of the human body due to 
+its large working sp ace. 
+The other category treats cables as a medium for 
+transmission, designing parallel or serial rotating joints with the 
+same degrees of freedom as the human body 
+[13][14][15][16][17][18]. These designs do not strictly imitate 
+the human physiological structure and, through optimization of 
+the mechanical structure and cable layout, can significantly 
+improve their load -bearing capacity, dynamic characteristics, 
+and stiffness, achieving a workspace similar to that of the human 
+body. However, these designs  are usually complex and do not 
+possess kinematic principles and driving mechanisms similar to 
+the human body.  
+Therefore, how to balance a simple structural design, large 
+workspace, and kinematics and driving mechanisms similar to 
+the human body is one of the research issues of humanoid 
+robotic arms.  
+This study will design the mechanical structure of a cable -
+driven humanoid robotic arm based on the structure of the 
+human arm, conduct dynamic modeling  and workspace analysis, 
+and achieve a workspace and driving mechanism similar to that 
+of the human arm.  II.DESIGN OF CABLE -DRIVEN HUMANOID ROBOTIC ARM
+The overall configuration of the designed robotic arm is 
+shown in Fig. 1. 
+A.Shoulder Joint Design
+In order to  increase the range of motion of the shoulder joint,
+a double -layer joint with single cable constraints is designed, 
+mimicking the way human ligaments envelop the joint. It 
+consists of three parts: the outer layer, the middle layer, and the 
+inner layer (Fi g. 2), which come into contact through spherical 
+sliding. The middle and outer layers each have four equidistantly 
+distributed cable h oles through which a closed cable  loop passes 
+one by one, forming a constraint structure. Under the conditions 
+of sufficie nt lubrication and tensioned cables, the linear shape of 
+each segment of the cable can be considered as a circular arc 
+passing through the center of the sphere, and its geometric 
+configuration can be simplified as shown in Fig . 3. Here, α and 
+β represent t he wrap angle parameters of the middle and outer 
+layers, respectively, with the spherical radius being r. 
+When the middle layer rotates around a vector 
+OM
+  with an 
+angle θ to the x-axis in the x-y plane, the length of each segment 
+of the cable changes. Taking  
+11AB as an example, after rotation,
+we obtain  
+
+'
+11OA OA
+T 
+where  Fig. 2. The Single -Cable -Constrained Double -Layer J oint  
+Fig. 3. The G eometric Configuration  of the Single -Cable -Constrained 
+Double -Layer J oint  
+Fig. 1. The Overall C onfiguration of the Robotic A rm 
+429
+
+2cos (1 cos ) cos (1 cos ) cos sin sin sin
+2(1 cos ) cos sin cos (1 cos ) sin sin cos
+sin sin sin cos cos       
+       
+      
+    
+
+
+T
+ 
+and 
+
+ 0 ,90 0,         ， 
+thus 
+
+'
+' 11
+11'
+11arccosOA OBA B r
+OA OB
+
+  
+The total length S of the cable  loop can be obtained b y summing 
+up the arc s. Taking the relative length  
+
+SLr  
+The change in relative length is defined as  
+
+max min
+maxLLLL  As shown in Fig . 4, when α is large and β is small, 
+L  gets 
+small. To expand  the motion range of the joint, we take 
+135
+, 
+77 . Here  the change is only 0.83%, which can 
+be approximately considered as the middle layer sliding 
+spherically with the outer layer.  
+To prevent interference between the direct pull cables and 
+the mechanism during extensive joint movements, and in 
+reference to th e way muscles envelop the joints in the human 
+body, the cables are routed along a spherical surface. This 
+arrangement expands the range of motion of the joint, reduces 
+the overall volume of the joint, and decreases the likelihood of 
+interference.   
+For the middle layer of the shoulder joint, four cables are 
+used to pull along the surface of the middle layer of the shoulder 
+joint. For the inner layer of the shoulder joint, four cables are 
+used to pull along the surface where the inner layer meets the 
+middle l ayer (Fig . 5), with the cables fixed and wrapped around 
+the main shaft, passing through holes located at the edge of the 
+middle layer's outer surface, and reaching the outer layer. The 
+middle layer and inner layer have two and three rotational 
+degrees of f reedom, respectively.  
+B.Elbow  Joint Design
+The muscles on the dorsal side of the elbow joint envelop the
+joint, while the ventral muscles are more biased towards direct 
+traction. Referring to the layout of the muscles in the human 
+elbow joint, the basic configuration and driving of the  elbow Fig. 4. The Change in Relative L ength   
+Fig. 5. The Actuation of the Shoulder J oint  
+Fig. 6. The Actuation of the Elbow J oint  
+Fig. 7. The Actuation of the Elbow J oint  
+430
+joint are designed (Fig . 6). This joint has one degree of rotational 
+freedom, where the ventral cable wraps around a pulley located 
+on the upper arm and is connected to the forearm, while the 
+dorsal cable is guided th rough a fixed pulley and  passes through 
+a moving pulley . 
+C.Wrist  Joint Design
+The human forearm has one degree of freedom of spin, and
+the wrist joint has two degrees of freedom of rotation. In order 
+to simplify the design and reuse the control scheme, the degree 
+of freedom of the forearm is incorporated into the wrist joint, 
+adopting a design approach similar to that of the inner layer of 
+the shoulder joint. The basic configuration of the wrist joint is 
+similar to that of the inner layer of the shoulder joi nt (Fig . 7), 
+driven by four cables, which are fixed and wrapped around the 
+main shaft, coated on the spherical surface, and pass through the 
+points on the shell.  
+III.JOINT KINEMATIC MODELING AND WORKSPACE ANALYSIS
+A.Shoulder Joint
+The cable -driven layout of the middle layer of the shoulder
+joint can be simplified as shown in Fig . 8. Point 
+1A is 
+transformed into point 
+'
+1A after rotation. Taking  
+11AC as an 
+example, there is  
+
+'
+11
+11'
+11arccosOA OCAC r
+OA OC
+
+  By the same reasoning, the lengths of the other three cables can 
+be obtained.  
+The layout and top view of the inner layer cable drive of the 
+shoulder joint can be simplified as show n in Fig.  9, with three 
+degrees of rotational freedom, where points E are point s of 
+tangency between the cable and the main shaft. For ease of 
+control, a motion description method similar to the middle layer 
+is adopt ed: first, rotate by an angle 
+  around a vector  
+'OM
+ that 
+is at an angle  
+ to the x-axis in the  
+xy  plane, and then rotate 
+by an angle  
+ around the axis of the main shaft after rotation. 
+Taking 
+1 1 1B D E  as an example, it consists of two parts, one 
+located on the surface of the middle layer and the other on the 
+surface of the inner layer.  
+11BD
+is the part that adapts to the changes in the rotation of 
+the middle layer, and the solution method is the same as in ( 7). 
+For the discussion of the cables on the inner layer surface, a 
+similar concept to the polar coordinate system is used, with 
+1D
+being the ‘origin’  and 
+1DF being the ‘ polar radius’. The motion 
+of the main shaft is decomposed into distance and angle 
+movements. The distance movement is the change in the length 
+of  , which leads to a change in the length of the tangent arc and 
+the change in the wrapping angle of the cable around the main 
+shaft's circle due to the movement of the tangent point. The 
+angle movement is the rotation of the main shaft circle relative 
+to , which leads to a change in th e wrapping angle of the cable 
+around the main shaft's circle.  
+Calculate the change caused by the distance movement. 
+Taking point 
+1D as the South Pole, perform a stereographic
+projection on the inner layer surface, projecting the mai n shaft 
+circle and 
+11DE onto a two -dimensional plane  (Fig. 10 ). 
+According to the nature of spherical polar projection, their 
+projections on the plane form a line tangent to a circle.  The 
+coordinates of point F after rotation are  
+
+[0,0,1]TOF r  
+T 
+The central angle opposite to 
+1DF is Fig. 8. The Actuation of the Elbow J oint  
+Fig. 9. The Actuation of the Shoulder Joint   
+Fig. 10. The Stereographic Projection of the Inner Layer Surface   
+431
+
+1
+1
+1arccosOD OFD OF
+OD OF
+
+  
+Taking the 
+xz  section as shown in Fig . 11, 
+12LL and
+12JJ
+are the diameter of the main shaft circle and its projection,
+respectively.  
+Since the central angle opposite to the same arc is twi ce the 
+circumferential angle, we have  
+
+111
+2D KF D OF   
+1 2 111arcsin22zrL KF L KF L OFr    
+
+Thus, the diameter of the projection circle is  
+
+'
+1 2 2 1 1 1 2 [tan( ) tan( )] J J r L KF D KF D KF L KF     
+ 
+The distance from the center of the projection circle to point  is  
+
+'
+1 2 1 1 1 [tan( ) tan( )] JD r L KF D KF D KF L KF     
+ 
+Therefore, the length of the projection tangent 
+'
+1ED is 
+' 2 2
+1 1 1 21
+4E D JD J J 
+Thus, the central angle opposite to the arc 
+11DE is 
+
+'
+' 1
+1 1 1 2 2arctan2EDD OE D KEr    
+And t he length of 
+11DE is 
+
+1 1 1 1 D E r D OE  
+Simultaneously with the change in the length of 
+1DF , the
+position of the tangent point 
+1E and
+'E on the circle also
+changes, causing a change in the wrapping angle of the cable. 
+For the spherical triangle 
+11D E F
+ ( Fig. 12 ), there exists the sine 
+theorem: 
+
+1 1 1 1 1 1
+1 1 1 1sin sin sin
+sin sin sinD E F D FE FD E
+D OF D OE FOE     
+Thus, we have 
+
+11
+1 1 1 1
+1sinarcsin(sin )sinD E FD FE D OED OF    
+where 
+1D OF and
+11D OE are given by ( 9) and ( 15),
+respectively. Since 
+11DE and the main shaft circle are tangent,
+11D E F
+forms a right angle.
+Due to the fact that in practical motion control, only the 
+change in cable length needs to be concerned, the change in 
+cable length caused by the distance movement can be 
+represented as  
+
+1 1 1 1 1 dL D E r D FE   
+For the change in cable length caused by the angle 
+movement, take point F as the North Pole and project 
+1D
+upwards from the South Pole point, as shown in Fig . 13. Fig. 11. The 
+xz  Section
+Fig. 13. The Upward Stereographic P rojection  
+ Fig. 12. The Upward Stereographic P rojection  
+432
+Accord ing to the properties of spherical polar projection, it is 
+known that  
+
+''
+1PFD P FD   
+Using the inner layer as the reference frame, the coordinates 
+of 
+1D after rotation are 
+
+''
+11OD OD
+T 
+Let 
+
+'
+1[ , , ]T
+D D D OD x y z
+ 
+Then the coordinates of the projection of point 
+1D on the plane 
+are  
+
+'22[ , ]T DD
+DDrx ryFDr z r z
+  
+Thus  
+
+''
+''
+''arccosFP FDP FD
+FP FD
+
+  
+Considering the angle  
+ of rotation of the main shaft around 
+its own axis, the change in cable length caused by the angle 
+movement can be represented as  
+
+''
+1 ()azL r P FD    
+In summary, the length of the cable for section 
+1 1 1B D E
+can be expressed as  
+
+'
+1 1 1 1 1 da L B D L L   
+By the same reasoning, the lengths of the other three cables 
+on the inner layer can be obtained.  
+If the motion of the joint is described as "first rotating around 
+a vector  
+OM
+  in the 
+xy  plane that is inclined at an angle 
+  
+to the x -axis by an angle 
+ , and then rotating around the axis of 
+the rotated main shaft by an angle 
+ ", then for the human 
+shoulder joint , 
+ can exceed 90°  for almost any 
+ 0 ,360   .
+In this design  the theoretical upper limit of  
+ depends only on 
+the number of turns of the cable. For the middle layer of the 
+shoulder joint, for any 
+ 0 ,360   , there is
+
+max 58middle      For the inner layer of the shoulder joint, except for the two 
+narrow regions between 
+12DD , 
+34DD and the circle 
+1 2 3 4D D D D  
+ (Fig. 14), all above the circle is reachable by 
+the main shaft circle.  
+P is the midpoint of 
+12DD , and its  inclination angle is  
+
+arctanP
+P
+Py
+z  
+By adjusting the coordinates of point s D, we can obtain 
+70P
+, so for the inner layer of the shoulder joint, 
+max [70 ,77 ]inner  
+At the same time, taking the central angle of the main shaft 
+radius as 20° , the overall maximum inclination angle of the 
+shoulder joint  
+
+max max max ( 20 ) [108 ,115 ]inner middle          
+which can achieve a motion range similar to that of the human 
+shoulder joint.  
+B.Elbow Joint
+The cable -driven layout of the elbow joint can be simplified
+to the geometric configuration shown in Fig . 15. When the 
+elbow joint rotates, point B rotates to point
+'B . Since, in practical
+motion control, only the change in cable length needs to be 
+considered, considering the wrap angle of the pulley, the length 
+of the ventral cable can be expressed as 
+
+' ' '()A ventralL B D r B AX B AD     
+For the dorsal cable, due to the presence of the movable 
+pulley, its cable travel needs to be doubled:  Fig. 14. The W orkspace of the Shoulder  Joint Inner Layer 
+Fig. 15. The Geometric C onfig uration of the Elbow Joint  
+433
+
+2dorsal ELr  
+Taking the coordinates of  A (-80, 30) and B (60, 30), we have 
+
+arccos 133EA EBAEB
+EA EB   
+
+  
+This can achieve a motion range similar to that of the human 
+elbow joint.  
+C.Wrist  Joint
+The method for specifying the motion pattern and kinematic
+modeling of the wrist joint is consistent with that of the inner 
+layer of the shoulder joint, with only the parameters changing. 
+By adjusting the parameters, the maximum inclination angle of 
+the wr ist joint can be obtained  
+
+max [49.5 ,59.5 ]   
+This is not entirely consistent with the motion range of the 
+human wrist joint, but it can meet practical needs in most cases.  
+IV. CONCLUSION
+In this paper, referring to the enveloping effect of human  
+ligaments and muscles on joints, a cable -driven humanoid 
+robotic arm with a workspace similar to the human body and a 
+similar driving mechanism is designed, and kinematic modeling 
+of its joints is carried out. The main innovations of this paper are 
+as fol lows:  
+A single -cable -constrained double -layer spherical hinge is 
+proposed, which has the characteristics of a large range of 
+motion and being not easily disengaged; a four-cable three -
+degree -of-freedom mechanism driving along the spherical 
+surface is propo sed, which features a large workspace, compact 
+size, and low interference.  

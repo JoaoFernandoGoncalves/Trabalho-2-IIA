@@ -1,0 +1,309 @@
+IEEE TRANSACTIONS ON MEDICAL ROBOTICS AND BIONICS, VOL. 2, NO. 4, NOVEMBER 2020 569
+Improving Rigid 3-D Calibration for Robotic Surgery
+Andrea Roberti , Nicola Piccinelli ,Graduate Student Member, IEEE , Daniele Meli,
+Riccardo Muradore ,Member, IEEE , and Paolo Fiorini ,Life Fellow, IEEE
+Abstract —Autonomy is the next frontier of research in robotic surgery
+and its aim is to improve the quality of surgical procedures in the next
+future. One fundamental requirement for autonomy is advanced percep-tion capability through vision sensors. In this article, we propose a novel
+calibration technique for a surgical scenario with a da Vinci/circleRResearch
+Kit (dVRK) robot. Camera and robotic arms calibration are necessary
+to precise position and emulate expert surgeon. The novel calibrationtechnique is tailored for RGB-D cameras. Different tests performed onrelevant use cases prove that we signiﬁcantly improve precision and accu-
+racy with respect to state of the art solutions for similar devices on
+a surgical-size setups. Moreover, our calibration method can be easilyextended to standard surgical endoscope used in real surgical scenario.
+Index Terms —
+Surgical robotics, calibration, multi arm
+calibration.
+I. I NTRODUCTION
+A signiﬁcant part of current research in Robotic-assisted Minimally
+Invasive Surgery (R-MIS) is focussing on the development of
+autonomous systems for the execution of repetitive surgical steps,
+such as suturing, ablation and microscopic image scanning [1]. Thiswould potentially help surgeons, who could focus on the more cogni-tive demanding parts of the procedure, leaving repetitive actions to the
+robot. Autonomy requires systems with advanced perception, reason-
+ing and motion planning, as highlighted in [2], [3]. Speciﬁcally, bettermedical imaging and vision techniques have signiﬁcantly improved
+the performance of robotic surgical systems in a range of clini-
+cal scenarios, such as orthopaedics and neurosurgery [4]. Visionsystems can retrieve pre and intra operative information from tomog-
+raphy (CT) [5], magnetic resonance (MR) and ultrasound to plan toll
+trajectories and support surgeons’ decision making. However, image-guided interventions require an accurate calibration to map poses
+of robots, instruments and anatomy to a common reference frame.
+Hand-eye calibration has been widely studied within the roboticsliterature [6]. In R-MIS systems, where the patient-side arms areconstrained by a Remote Center of Motion (RCM), it is challenging
+to obtain the camera motion range needed to guarantee an accurate
+calibration. Wang et al. [7] takes advantage of this constraint by
+ﬁnding a unique relationship between the endoscope and the surgi-
+cal tool using camera perspective projection geometry. A different
+approach is followed in [8], [9] where the instruments themselvesare used as calibration tools. Thus far, several closed-form solutions
+for 2d images have been proposed for hand-eye calibration that use
+linear methods that separate rotations and translations. In [10], theorientation component was derived by utilizing the angle-axis for-
+mulation of rotation, then the translational component was estimated
+Manuscript received July 15, 2020; revised September 16, 2020 and October
+14, 2020; accepted October 19, 2020. Date of publication October 26, 2020;date of current version November 20, 2020. This article was recommended forpublication by Associate Editor D. Elson and Editor P. Dario upon evalua-
+tion of the reviewers’ comments. This work was supported in part by the
+European Research Council through the European Union’s Horizon 2020Research and Innovation Programme under Grant 742671 (ARS), and in part
+by the European Union’s Horizon 2020 Research and Innovation Programme
+under Grant 779813 (SARAS). (Corresponding author: Andrea Roberti.)
+The authors are with the Department of Computer Science, University of
+Verona, 37135 Verona, Italy (e-mail: andrea.roberti@univr.it).
+Digital Object Identiﬁer 10.1109/TMRB.2020.3033670using standard linear systems techniques. Chou and Kamel [11] intro-
+duced quaternions to represent orientation and solved the quaternion
+coefﬁcients as a homogeneous linear least squares problem. A closedform solution was then derived using the generalized inverse method
+with singular value decomposition analysis. Other works [12]–[14]
+used the Kronecker product to get a homogeneous linear equationfor the rotation matrix. However, separating the rotational and trans-lational components neglects the intrinsic correlation between them.
+Working directly in 3D space is then a better solution. In [15] the
+authors studied the comparison between hand-eye calibration basedon 2D and 3D images, introducing quantitative 2D and 3D error
+metrics to assess the calibration accuracy. They proved that the 3D
+calibration approach provides more accurate results on average butrequires burdensome manual preparation and much more computation
+time than 2D approaches. Kim used 3D measurements at the center
+of markers for the hand-eye calibration [16]. Fuchs [17] proposed asolution based on depth measurements instead of 2D images, using a
+calibration plane with known position and orientation. The hand-eye
+calibration was then obtained by estimating the best ﬁtting calibrationplane of the measured depth values.
+In this article, we propose a novel calibration method for the surgi-
+cal robotic scenario using the da Vinci
+/circleRResearch Kit (dVRK) and
+an RGB-D camera. Differently from [17], the accuracy and com-putational time of our method do not depend on the placement of
+the calibration board within the workspace. We perform exhaustive
+experimental validation on relevant use cases for surgery. We separatethe calibration of the robotic arms (two Patient-Side Manipulators,
+PSM1 and PSM2, and an Endoscope Camera Manipulator, ECM)
+from the hand-eye calibration of the camera. For both calibrationswe propose a three-step method with closed-form solution:
+1) touching reference points on a custom calibration board with
+the end-effectors of the surgical robot.
+2) recognizing the same reference points with the RGB-D camera.3) mapping the poses reached by the robotic arms in the ﬁrst step
+to the 3D points computed in the second step.
+The main advantage of the proposed method is the improved accuracyin a 3D metric space, which is increased by a factor of four with respect
+to the state-of-the-art results with comparable sensors [15]. Moreover,
+with our method the camera can be mounted on the moving endoscopicarm of the dVRK, overcoming the limitations of a ﬁxed camera.
+This article is organized as follows. In Section II and Section III
+we describe our calibration technique and the setup used to test ourmethod. In Section IV we describe the validation of the proposed
+method by evaluating the workspace through simple kinematic tasks.
+We also compare our calibration method with Tsai’s [18], which isthe gold standard for hand-eye calibration, in two different tasks:grasping and camera projection to 3D space. In Section V we present
+our conclusions and plans for future works.
+II. P
+ROPOSED METHOD
+The aim of the calibration procedure is twofold. First, we per-
+form computation of the rigid transformations Tw⋆between the
+common reference frame ( world ) and the base frame of the arms,
+⋆∈{ecm b,psm 1b,psm 2b}. Second, we estimate the transformation
+Tcamecm between the camera reference frame and the ECM reference
+frame. The resulting transformation tree is shown in Figure 1.
+This work is licensed under a Creative Commons Attribution 4.0 License. For more information, see https://creativecommons.org/licenses/by/4.0/
+570 IEEE TRANSACTIONS ON MEDICAL ROBOTICS AND BIONICS, VOL. 2, NO. 4, NOVEMBER 2020
+Fig. 1. The reference frames produced by our proposed method (the axes
+direction of the reference frames are only for visualisation purpose). Theorange transformations are known, whereas the black transformations are to
+be estimated.
+Fig. 2. The calibration components. a) the calibration board with the marker,
+the coloured axes represents the common reference frame directions b) theadapter for the ECM positioning.
+We use a custom calibration board, shown in Figure 2(a), with
+an ArUco marker in the center of a circumference of 50 mm radius,
+with several reference dots. We equipped the ECM with a 3D-printed
+adapter, shown in Figure 2(b). The adapter has a smaller tip than theECM to guarantee precise positioning on the dots on the board.
+The procedure starts by positioning the calibration board in the
+robot workspace. We choose a set of reference points Psuch that
+each point p∈Pis reachable by the three arms and visible from the
+camera. The points in Pmust be symmetric with respect to the center
+of the board to compute the origin of the common reference frame;
+at least three points are needed to estimate the plane coefﬁcients. Thebest ﬁtting plane is characterized by the centroid of the point set P,
+c, and the normal vector n. Their optimal estimations are the solution
+of the optimisation problem
+/braceleftbigˆc,ˆn/bracerightbig
+=arg min
+c,|n|2=1n/summationdisplay
+i=1/parenleftBig
+(pi−c)Tn/parenrightBig2
+(1)
+As in [19] the centroid is estimated by
+ˆc=1
+nn/summationdisplay
+i=1pi. (2)
+The normal vector nis obtained by factorizing the distance matrix A
+with Singular Value Decomposition (SVD)
+A=USVT=/bracketleftbigp1−ˆc,...pn−ˆc/bracketrightbig
+∈R3×n(3)and taking the third column of the matrix U=/bracketleftbigu1u2u3/bracketrightbig
+,
+ˆn=u3. To generate a common reference frame for all the tools
+we implement the following three main steps:
+(1) Arm calibration(2) Camera calibration
+(3) Hand-eye calibration.
+A. Arm Calibration
+To ﬁnd the transformation of the arms base frame with respect to
+the common reference frame we record the end effector pose of the
+arms (PSMs and ECM with adapter) on each point in the set P.I n
+order to obtain the ECM effective pose, we remove the known rigid
+transformation between the adapter and the ECM. On this set we
+estimate the best ﬁtting plane using (1). The set Pis then augmented
+by adding a point above the calibration board acquired by moving
+the arm’s end effector. This last point is used to deﬁne the desired
+plane normal direction
+n
+d=pn+1−c/vextendsingle/vextendsinglepn+1−c/vextendsingle/vextendsingle2
+where pn+1is the last point in the ordered set P,cis the centroid
+ofPand|∗|2is the vector norm. For each arm, the homogeneous
+transformation Tw⋆of the common reference with respect to the arm
+base frame is deﬁned using the direction versors
+u=sign(n·nd)n
+l=u×p1−c
+|p1−c|2
+f=l×u
+and the centroid c,
+Tw
+⋆=⎡
+⎢⎢⎣fxlxuxcx
+fylyuycy
+fzlzuzcz
+000 1⎤
+⎥⎥⎦.
+B. Camera Calibration
+To ﬁnd the transformation Twcam for the RGB-D camera we ﬁrst
+detect the center of the ArUco marker on the board with respect tothe camera frame. Once we ﬁnd a camera position that ensures good
+visibility and a stable pose of the ArUco marker, we align the pose
+on the point cloud generated from the depth map acquired by theRGB-D camera. We use the marker pose and its known radius to
+generate the pose of every dot in the set Pin the marker reference
+frame, as well as the point above the calibration board.
+Once the pose set Pis obtained we ﬁnd the best ﬁtting plane
+using (1) and then we build the homogeneous transformation T
+wcam
+between the common reference frame to the camera base frame by
+adapting the previous approach used for the arms.
+C. Hand-Eye Calibration
+The hand-eye calibration problem is formulated using the homo-
+geneous transformation matrices:
+AX=XB
+where AandBare known homogeneous matrices representing the
+frames of the base of the robot and the camera, respectively. Theunknown transformation Xis between the robot coordinate frame
+and the camera coordinate frame. Given Twcam, we can compute Xas
+the relative homogeneous transformation between the end effector ofthe ECM and the RGB-D base frame:
+Tcam
+ecm=Tcam
+w/parenleftbig
+Tecm
+w/parenrightbig−1.
+IEEE TRANSACTIONS ON MEDICAL ROBOTICS AND BIONICS, VOL. 2, NO. 4, NOVEMBER 2020 571
+Fig. 3. The proposed setup for calibration, with the RealSense d435, the
+PSMs and the calibration pattern.
+TABLE I
+REALSENSE D 435 S PECIFICATIONS
+III. E XPERIMENTAL SETUP
+The validation of the proposed method has been carried out with
+the dVRK robot shown in Figure 3.
+The stereo endoscope has been augmented with an Intel RealSense
+d435 RGB-D camera rigidly attached to the endoscope through a 3D
+printed adapter. The camera speciﬁcations are reported in Table I. The
+whole calibration method has been implemented in Robot OperatingSystem (ROS) using the Point Cloud Library (PCL) and OpenCV . Thepresent setup is not compatible with a surgical scenario. However it
+is well possible that in the near future small RGBD cameras could
+be integrated within the endoscope.
+IV . E
+XPERIMENTAL RESULTS
+To experimentally validate our methodology we compared our cal-
+ibration with the Tsai’s method [18] in two benchmark tests for
+surgical robotics:
+•Localization and grasping of small targets,
+•Dual-arm manipulation
+Finally we evaluated the accuracy of the projection from 2D camera
+image plane to the 3D workspace.
+A. Localization and Grasping
+In the ﬁrst scenario (Figure 4) the two PSMs must autonomously
+grasp a ring placed on the calibration board, in this case on location 2.
+The RGB-D camera identiﬁes the point cloud corresponding to thering after color and shape segmentation, and points are transformed
+from the camera to the common reference frame. The ring has a
+diameter of 15 mm, and the target point for both PSMs is chosen asthe center of the ring. The ring is placed in the 9 different locations onthe board to cover the full x−yplane, as shown in Figure 4. The arms
+reach the target points ten times, and for each iteration we compute
+the Euclidean distance between the target and the ﬁnal positions of thePSMs. In this way, we estimate the mean accuracy of our calibration
+procedure on the x−yplane. The results are reported in Figure 5
+and compared with state-of-the-art Tsai’s calibration method [18]. Itis worth mentioning that errors are comprehensive of the estimated
+kinematic accuracy of the da Vinci
+/circleR:1.02 mm on average when
+Fig. 4. Setup for the localization and grasping experiment. The numbers on
+calibration board represents the nine locations used during the experiment.The ring is identiﬁed by the camera and then reached by the PSMs.
+Fig. 5. The measured 3D positioning errors between the robot end effectorand the grasping point.
+TABLE II
+AC
+OMPARISON OF THE ERROR IN THE LOCALIZATION
+AND GRASPING TEST
+localizing and reaching ﬁducial markers [20], with a maximum error
+of 2.72 mm [21].
+Table II shows that our method achieves signiﬁcantly better
+accuracy (0 .53 mm average error against 1 .83 mm with Tsai’s cal-
+ibration). The error does not depend on the location of the ring on
+thex−yplane.
+B. Dual Arm Manipulation
+In the second scenario (Figure 6) the PSMs start holding the
+same ring, and they must execute simultaneous pre-computed circular
+trajectories with center on the zaxis of the common reference frame
+(45 mm above the calibration board) and radius rranging from 10 mm
+to 40 mm. Circumferences are ﬁrst deﬁned in the x−zplane of
+the common reference frame (normal to the calibration board), and
+then replicated in planes rotated around the zaxis with a step of
+10 deg. In this way we deﬁne a spherical workspace by interpolation
+between the recorded trajectories. PSMs are commanded with the
+transformed waypoints in their relative frames. This task validates theaccuracy of the transformations between the arms computed with the
+proposed method. We measure the difference between the trajectories
+572 IEEE TRANSACTIONS ON MEDICAL ROBOTICS AND BIONICS, VOL. 2, NO. 4, NOVEMBER 2020
+Fig. 6. Dual arm manipulation experiment. The two arms carries a ring while
+performing circular trajectories through the workspace.
+of the two PSMs, and we consider the standard and the maximum
+deviations from the mean for each radius. In absence of calibration and
+kinematic errors, the difference between the trajectories would havenull standard deviation. Figure 7 shows the absolute error throughthe workspace for spheres with radii 20 mm, 30 mm and 40 mm, by
+using the Lambert equal-area cylindrical projection [22]. In Table III
+we report the errors for all the spheres. We notice that the mean errorincreases with the radius of the sphere, as the PSMs move away from
+the calibration plane. The standard deviation of the error increases with
+the radius but remains below 0 .11 mm, hence the overall error does
+not change signiﬁcantly on the surface of the spheres. This ensures
+good repeatability of motions in the whole workspace. The accuracy
+of our calibration method in 3D is compatible with the requirements ofsurgery (the mean error between the arms is below 1 mm, comparable
+with the known kinematic accuracy of the da Vinci
+/circleR).
+C. 2D/3D Projection
+In the last scenario the PSM1, with a colored marker on its tip,
+executes a spiral-shaped trajectory along the entire workspace. TheRGB-D camera identiﬁes the marker in the image plane, and the
+corresponding 3D point can be computed using the depth value.
+The trajectory starts near the origin of the common reference frameand then increases in radius and altitude according to the following
+parametric equations
+x(t)=κtcos(ωt)
+y(t)=κtsin(ωt)
+z(t)=κt
+where ωis the constant angular speed and κ∈Ris a time-scaling
+factor. The orientation of the end effector is kept ﬁxed towards the
+camera along the trajectory. We measure the Euclidean error betweenthe points in the trajectory executed by the arm and the re-projected
+points from the camera image plane. Figure 8 and Table IV show that
+the re-projection accuracy with our method signiﬁcantly outperformsthe one reached with Tsai’s. In fact, the mean error (4 .71 mm) and
+the maximum error (11 .76 mm) are four and two times smaller than
+the one achieved by Tsai’s method. It is important to remark that the
+measured error also includes the marker detection accuracy.
+Finally Figure 9 shows the re-projection of PSMs end effector posi-
+tion onto the camera image plane with both calibration methods. Our
+method achieves a better re-projection better of the 3D instruments.
+V. C
+ONCLUSION
+In this article we proposed a novel 3D calibration procedure for
+the patient-side manipulators and the ECM of the da Vinci/circleRsurgical
+Fig. 7. Absolute error of the dual arm manipulation through the workspace.
+The workspace has been projected using the Lambert equal-area cylindrical
+projection, the error is reported in mm. a) the workspace surface of the spherewith radius 10 mm, b) the projected surface of the sphere with radius 10 mm,c) the workspace surface of the sphere with radius 20 mm, d) the projected
+surface of the sphere with radius 20 mm, e) the workspace surface of the
+sphere with radius 30 mm, f) the projected surface of the sphere with radius30 mm, g) the workspace surface of the sphere with radius 40 mm, h) theprojected surface of the sphere with radius 40 mm.
+TABLE III
+T
+HEPOSITIONING ERROR BETWEEN THE PSM1 AND PSM2 D URING THE
+DUAL-ARMMANIPULATION EXPERIMENT
+robot. Our procedure exploits an RGB-D Realsense camera. We
+have validated our calibration procedure by evaluating the 2D/3D
+projection errors on two relevant use cases for surgery localization
+and grasping of a small object and dual-arm manipulation. Bothtasks require an accurate estimation of the transformation tree con-
+necting the arms and the camera, to guarantee precise positioning
+IEEE TRANSACTIONS ON MEDICAL ROBOTICS AND BIONICS, VOL. 2, NO. 4, NOVEMBER 2020 573
+Fig. 8. Spiral-shaped trajectory executed by the PSM1 with our method in
+(a) and Tsai’s method in (b). The red trajectory represents the kinematics ofthe PSM1, while the blue trajectory represents the marker identiﬁed in 3Dspace.
+TABLE IV
+AC
+OMPARISON OF THE ERROR BETWEEN THE MARKER TIPTRAJECTORY
+AND THE MEASURED TIPTRAJECTORY FOR THE PROJECTION TEST
+Fig. 9. An example of re-projection of da Vinci/circleRsurgical instruments by
+using kinematic re-projection of the model directly onto camera color image.
+and coordination of the PSMs. In our experiments the proposed
+method outperforms the state-of-the-art solution proposed by Tsai.
+Our method reaches an accuracy below 1 mm on the x−yplane and
+in the dual arm manipulation scenario, which is comparable with theintrinsic kinematic precision of the da Vinci/circleR.
+The main drawback of our solution is the use of a RGB-D
+camera, which limits its actual application in surgery. We thinkthat our methodology can be extended to a setup with a stan-
+dard surgical endoscope. The main issue with an endoscope is
+that the small baseline between the stereo cameras introduces addi-tional complexities in computing depth maps and reduces the depth
+range of view. We will address this problem in our future research.Moreover, we will develop an autonomous procedure for our cal-
+ibration method, which can signiﬁcantly reduce manual errors and
+simplify its implementation in a surgical setup.

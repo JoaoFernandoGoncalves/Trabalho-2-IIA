@@ -1,0 +1,1323 @@
+Received December 27, 2017, accepted March 23, 2018, date of publication May 4, 2018, date of current version June 20, 2018.
+Digital Object Identifier 10.1 109/ACCESS.2018.2833160
+Design of an Anthropomorphic, Compliant, and
+Lightweight Dual Arm for Aerial Manipulation
+ALEJANDRO SUAREZ
+ , GUILLERMO HEREDIA
+ , AND ANIBAL OLLERO
+Robotics, Vision and Control Group, University of Seville, 41092 Seville, Spain
+Corresponding author: Guillermo Heredia (guiller@us.es)
+This work was supported in part by the European Commission H2020 project AEROARMS under Grant H2020-ICT-2014- 644271,
+and in part by the Spanish MINECO Retos projects AEROCROS under Grant DPI2015-71524-R and ARM-EXTEND under Grant
+DPI2017-89790-R. The work of A. Suarez was supported by the Spanish Ministerio de Educación, Cultura y Deporte through its
+FPU program.
+ABSTRACT This paper presents an anthropomorphic, compliant and lightweight dual arm manipulator
+designed and developed for aerial manipulation applications with multi-rotor platforms. Each arm provides
+four degrees of freedom in a human-like kinematic conguration for end effector positioning: shoulder pitch,
+roll and yaw, and elbow pitch. The dual arm, weighting 1.3 kg in total, employs smart servo actuators and
+a customized and carefully designed aluminum frame structure manufactured by laser cut. The proposed
+design reduces the manufacturing cost as no computer numerical control machined part is used. Mechanical
+joint compliance is provided in all the joints, introducing a compact spring-lever transmission mechanism
+between the servo shaft and the links, integrating a potentiometer for measuring the deection of the joints.
+The servo actuators are partially or fully isolated against impacts and overloads thanks to the ange bearings
+attached to the frame structure that support the rotation of the links and the deection of the joints. This simple
+mechanism increases the robustness of the arms and safety in the physical interactions between the aerial
+robot and the environment. The developed manipulator has been validated through different experiments in
+xed base test-bench and in outdoor ight tests.
+INDEX TERMS Aerial manipulation, aerial robots, design of oating-base manipulators, compliance.
+I. INTRODUCTION
+Aerial manipulation proposes the development of ying
+robots equipped with one or more [1] robotic arms capable to
+perform certain operations in workspaces out of the reach for
+humans. This technology is intended to simplify and reduce
+the costs associated to inspection and maintenance tasks that
+are typical in a wide variety of scenarios in the industry.
+Some examples include the detection and repair of leaks in
+high altitude pipes in chemical plants, the insulation of cracks
+in the blades in wind turbines, the installation and retrieval
+of sensor devices in buildings and other structures, or the
+measurement of the deection in the metal beams in bridges.
+The platforms employed in aerial manipulation are
+vertical take-off and landing (VTOL) unmanned aerial
+vehicles (UA V) due to the necessity of staying in hover
+during the execution of the operation carried out by the
+robotic arms. Autonomous helicopters [2], [3] and quadro-
+tors [4] have been employed in grasping and transportation
+tasks in outdoors. Grasping moving objects [5] and coop-
+erative grasping with multiple UA Vs [6] have been alsodemonstrated previously. Two approaches can be identied in
+the development of aerial manipulation robots: 1) integrating
+a conventional robotic arm designed for ground applications,
+or 2), designing a specic manipulator intended to aerial
+platform. The rst approach is followed in [2] and [7], where
+a 7 degrees of freedom (DOF's) industrial manipulator is
+integrated in a helicopter with high payload capacity, or in [4],
+where a quadrotor is equipped with a 7-DOF robotic arm
+commercially available. Several research prototypes have
+been designed for multirotors and tested on ight, with
+different number of degrees of freedom, from two up to
+seven [8][12]. Aerial manipulators have been applied in a
+wide variety of applications, including valve turning with
+quadrotors [13], visual servoing [14], contact based inspec-
+tion [15], or grasping [16], [17].
+Mechanical compliance is a highly desirable feature
+for an aerial manipulation robot as it increases safety in
+operations involving physical interactions with the environ-
+ment [18][20]. The ability of springs and other elastic ele-
+ments for absorbing the energy of impacts and overloads at
+VOLUME 6, 2018This work is licensed under a Creative Commons Attribution 3.0 License. For more information, see http://creativecommons.org/licenses/by/3.0/29173
+A. Suarez et al.: Design of an Anthropomorphic, Compliant, and Lightweight Dual Arm for Aerial Manipulation
+higher rates than the actuators can provide in a passive way
+prevents that contact forces are rigidly propagated through
+the manipulator to the aerial platform, destabilizing it. Series
+elastic actuators [21] introduce an elastic transmission ele-
+ment between the actuator and the output link, allowing the
+estimation of the forces based on deection measurement.
+This principle can be exploited in low weight robotic arms
+built with low cost servos that do not provide any torque con-
+trol or feedback capabilities. That is, the joint torque and the
+contact forces can be estimated just measuring the deection
+of the elastic element [22][24]. Mechanical joint compliance
+also protects the gearbox of the servos against peak forces
+caused by impacts, the transition from contactless to contact
+situations, or overloads caused by motion constraints, for
+example in closed kinematic chain congurations. In our
+previous work, two research prototypes of human-size, com-
+pliant and very low weight robotic arms where developed,
+demonstrating their application to soft collision detection and
+reaction, payload estimation [25], force torque estimation and
+control, and obstacle localization [26].
+TABLE 1. Main features of different aerial manipulators.
+Bimanual manipulation has been considered in some
+recent works, as the valve turning task described in [13],
+the grasping and transportation application shown in [27], or
+the human-size dual arm aerial manipulator presented in [28].
+The main motivation for a dual arm manipulator is to extend
+the range of tasks that a ying robot is able perform w.r.t.
+a single arm, allowing for example grasping large objects,
+manipulating two devices at the same time, or increasing
+the maximum lift load. This is done however at expenses of
+increasing the payload of the UA V, so the effort now is in
+the design of very low weight manipulators [29]. The main
+features of several lightweight and compliant manipulators
+are compared in TABLE 1.
+The main contribution of the paper is the development and
+experimental validation of an anthropomorphic, compliant
+and lightweight (1.3 kg) dual arm manipulator designed for
+aerial manipulation applications. Each arm provides 4 DOF's
+for positioning the end effector in a human-like kinematic
+conguration. A simple and compact compliant transmission
+mechanism is integrated in all the joints with a deection
+potentiometer, allowing the estimation and control of the joint
+torque and the contact forces. A customized and carefully
+designed aluminum frame structure manufactured by laser cut
+isolates the servo actuators against impacts and radial-axial
+overloads, supporting the rotation of the output links and thespring-lever transmission. The paper details the design and
+construction of the arms, covering the kinematics, dynamics,
+and the force-torque relationships. Identication experiments
+have been conducted for evaluating the impact response and
+the frequency behavior. Deection control experiments show
+how compliance can be exploited for reducing the interaction
+forces between the aerial manipulator and the environment
+on ight. The developed dual arm manipulator was inte-
+grated in a hexarotor platform, demonstrating bimanual aerial
+grasping.
+The rest of the paper is organized as follows. Section II
+introduces some general design considerations related to
+aerial manipulation. Section III presents the design of the dual
+arm manipulator with its mechanical specications, the kine-
+matics and the control architecture. Section IV details the
+spring-lever transmission mechanism integrated in the joints,
+deriving the force-torque relationships. Section V describes
+the structure of the arms, providing the mass and inertia val-
+ues. Experimental results validating the design are shown in
+Section VI, whereas Section VII summarizes the conclusions
+of this work.
+II. DESIGN CONSIDERATIONS
+A. REQUIREMENTS IN AERIAL MANIPULATION
+1) LOW WEIGHT AND INERTIA FEATURES
+The rst two parameters that should be determined in the
+design of a robotic arm to be integrated in an aerial platform
+are its weight and maximum lift load. Let us call PLUAVto
+the maximum payload that the UA V is able to lift, and marm
+andPLarmto the weight and expected payload that the arm
+should lift, respectively. Then, the following equation can be
+dened:
+marmCPLarmPLUAV (1)
+HereD0:7 is the dynamic margin constant that indicates
+how far away the brushless motors of the UA V are from
+the saturation in normal operation. If the aerial platform is
+overloaded ( > 0:8), the propellers may suffer overheating
+and they might not respond properly to motion commands.
+In order to reduce the inertia of the arms, and thus the
+inuence of arms motion over the aerial platform, it results
+convenient to place the servos as close as possible to the base
+of the aerial platform. Different transmission mechanisms can
+be employed for this purpose, including timing belts [10],
+pulley-wire [20] or rigid bars [28]. However, these solutions
+typically increase the weight of the manipulator, reduce the
+range of rotation of the joints, and complicate the design and
+assembly of the manipulator.
+The mass distribution of the different components
+employed in the construction of the arms is represented in
+Fig. 1, whereas TABLE 2 indicates the mass density of the
+materials.
+2) ACTUATORS
+The design and development of robotic arms intended to
+aerial manipulation is still a hard task due to the multiple
+29174 VOLUME 6, 2018
+A. Suarez et al.: Design of an Anthropomorphic, Compliant, and Lightweight Dual Arm for Aerial Manipulation
+FIGURE 1. Mass distribution (grams and %) of the developed dual arm.
+TABLE 2. Materials employed in the lightweight dual arm.
+design requirements imposed by the aerial platform in terms
+of very low weight, low inertia, mechanical robustness and
+dexterity. What is more, there exist important technological
+limitations as only a few brands of actuators are suitable for
+this purpose. In this sense, the so called smart servos, such
+as Herkulex or Dynamixel, are nowadays the best option for
+building low weight manipulators [4], [8], [11]. These devices
+include the motor, gearbox, electronics, control and commu-
+nications in a compact device that can be easily assembled
+in a frame structure, providing high torque to weight ratios.
+However, the performance of these actuators from the control
+point of view is quite limited, as they do not provide any
+torque feedback or control, the control rates are usually low
+(<100 Hz), and the embedded controller has to be interfaced.
+Although the lift load of the arms should be determined by the
+application, its value is given in practice by the combination
+of servo actuators employed, taking into account that the stall
+torque parameter provided by the manufacturer is usually
+23 times higher than the maximum dynamic torque that the
+servo is able to provide.
+3) KINEMATICS
+The choice of the kinematic conguration of the arms is
+determined in the rst place by the task that the aerial robot is
+expected to perform. Almost all aerial manipulators that can
+be found on literature consider at least two joints, shoulder
+pitch and elbow pitch [8], [9], with the forearm and upper
+arm links. Some prototypes exploit the rotation of the UA V
+around the yaw angle instead of employing a servo for this
+purpose [8]. Other works implement the typical conguration
+with three joints for positioning and two [10] or three [11]
+DOF's for wrist orientation. Motivated by the convenience
+to provide a human-like manipulation capability, this work
+follows a bio-inspired design approach, so the kinematics and
+size of the human arm are replicated. The idea is that the
+application of the arms results more comfortable and intuitivefor a human operator, without requiring special training. The
+mechanical construction of this conguration also results in
+a compact and robust design, as it will be seen later.
+B. COMPONENTS AND MATERIALS
+1) FRAME STRUCTURE
+Aluminum and carbon ber are widely used for building low
+weight robotic arms intended to aerial manipulation due to
+their mechanical robustness and low weight. ABS or PLA
+plastics should be avoided as they are not impact resistant
+and may suffer deformations for temperatures around 40
+C. Note that in case of impact, the manipulator will support
+the kinetic energy of the whole aerial platform (0.625 J for
+a 5 kg weight platform moving at 0.5 m/s). Most aerial
+robots employ carbon ber in the frame structure of the arms.
+However, the manufacturing cost and the material itself is
+quite expensive with respect to aluminum. Besides its low
+cost, aluminum is highly malleable, so L-shaped or U-shaped
+frames can be easily manufactured bending a at frame. The
+possibility of introducing these geometries is important in the
+design of the frame structure and its parts.
+2) COMPLIANT TRANSMISSION
+As mentioned before, one of the main contributions of this
+work is the development of a simple, compact and low weigh
+spring-lever transmission mechanism integrated in all the
+joints of the arms to provide compliance. Conventional steel
+springs are preferred rather than other elastic materials like
+elastomers due to their high linearity and low hysteresis. The
+mechanism makes use of igus ange bearings screwed to
+the aluminum frame structure for supporting the rotation of
+the output links w.r.t. the servo shafts. These components
+provide low friction and vibration dampening, being also
+robust against impacts and radial/axial loads.
+FIGURE 2. 3-D model of the anthropomorphic dual arm integrated in a
+hexarotor. Take-off/landing (left) and operation (right) configurations.
+C. INTEGRATION IN AERIAL PLATFORM
+In order to maintain the symmetry of the aerial platform
+in terms of geometry and mass distribution, the manipula-
+tor is typically installed under the central hub of the UA V,
+trying to reduce the displacement of the center of mass
+(CoM) with respect to the vertical axis. This implies that the
+arms should be placed between the legs of the landing gear,
+what may reduce the workspace of the arms due to motion
+constraints. The solution adopted in this work is the one
+shown in Fig. 2. Thanks to the anthropomorphic kinematic
+VOLUME 6, 2018 29175
+A. Suarez et al.: Design of an Anthropomorphic, Compliant, and Lightweight Dual Arm for Aerial Manipulation
+conguration, the arms can be lifted rotating the shoulder
+roll joints, so the upper arm and forearm links are above the
+landing gear for UA V take-off and landing. An adaptation
+frame consisting of two transversal hollow aluminum proles
+is attached to the base of the landing gear. The conguration
+of the arms during the take-off and manipulation phases can
+be seen in Section VI-D.
+FIGURE 3. Phases involved in the design, development and experimental
+validation of an aerial manipulation prototype.
+D. DEVELOPMENT METHODOLOGY
+The development of an aerial manipulation robot involves a
+number of phases, graphically represented in Fig. 3. The rst
+one is the concept design, which consist of dening the main
+specications of the manipulator (payload, size, number of
+joints, capabilities), and drawing different designs on paper
+to have an idea of its structure. Once a preliminary design
+is proposed, the different frame parts are modelled using
+3D computer aided design software such as CATIA or Solid
+Edge. It is convenient to specify the mass density of all the
+components in the model in order to obtain an estimation
+of the mass and inertia of the prototype during its design.
+It is also necessary to take into account the limitations and
+constraints associated to the manufacturing and assembly
+processes, as stated in Section II-B. Several iterations may
+be necessary in the design until this can be implemented in
+the desired way.
+Once the prototype is assembled, the next step consists of
+integrating the sensors, electronics, and wiring in the frame
+structure. The hardware/software architecture, described in
+more detail in Section III-C, is the basis for the development
+of the different functionalities of the aerial manipulator, such
+as position, trajectory, and force control, collision detection
+and reaction, teleoperation, or visual servoing for grasping.
+All these capabilities must be extensively validated in test-
+bench before integrating the manipulator in the aerial vehicle
+in order to prevent accidents due to unexpected behaviors,
+evaluating the reliability and accuracy through experimental
+results.
+The installation of the arms in the multirotor requires an
+additional frame structure which should be attached at the
+landing gear or well at the base of the platform. This structurecan also support the batteries, the computer board, and other
+sensors, as the camera. The validation of the aerial robot in
+outdoor ight tests requires the participation of at least two
+persons: the pilot of the UA V and the operator of the arms.
+Security nets and ropes should be used in the rst tests for
+preventing potential crashes, especially if the evaluated task
+involves contact forces. The position and orientation of the
+multirotor, the applied control signals, the angular position
+of the actuators and their references should be logged in data
+les so the experimental results can be analyzed ofine.
+FIGURE 4. Anthropomorphic, compliant and lightweight dual arm.
+FIGURE 5. Detailed view of the joints in the right arm. Hands-up pose.
+III. ANTHROPOMORPHIC DUAL ARM DESIGN
+A. DESCRIPTION
+A picture of the developed anthropomorphic, compliant and
+lightweight dual arm manipulator can be seen in Fig. 4, with
+a detailed view of the right arm construction in Fig. 5. The
+dual arm system was designed and developed completely
+from scratch, although several design concepts are taken from
+our previous work [25], [26], [28]. The actuators used are
+the Herkulex DRS-0101 and DRS-0201 smart servos from
+Dongbu Robot, introducing the igus EFOM-08 and EFSM-
+06 ange bearings in the frame structure for isolating the
+servos from impacts and overloads and for building the com-
+pliant transmission mechanism. The frame structure of the
+arms consists of a set of 34 customized aluminum parts
+manufactured by laser cut, two 8 mm Ø shafts for the shoulder
+29176 VOLUME 6, 2018
+A. Suarez et al.: Design of an Anthropomorphic, Compliant, and Lightweight Dual Arm for Aerial Manipulation
+pitch joint, and four 6 mm Ø hollow proles for the upper arm
+and forearm links. The laser cut frames include 2 mm, 8 mm
+and 10 mm thickness parts. The U-shaped aluminum frames
+in the shoulder pitch-yaw and in the elbow pitch structures
+(see Section V) are built bending 90 deg the 2 mm thickness
+at prole sections. The frame structure has been designed in
+such a way that the cost and complexity of the manufacturing
+processes is reduced as much as possible.
+TABLE 3. Specifications of the compliant dual arm.
+TABLE 4. Specifications of the joints of the arms.
+The main specications of the dual arm manipulator are
+summarized in TABLE 3, providing additional information
+relative to each joint of the arms in TABLE 4. The maximum
+lift load was obtained placing a payload mass at the grippers
+with the arm fully stretched, rotating it from the vertical to the
+horizontal position so the torque due to gravity is maximum.
+The kinematic conguration, described in more detail in the
+following subsection, as well as the dimensions are similar
+to the human arm motivated by the convenience of having
+human-like manipulation capabilities in an aerial platform.
+The shoulder roll joints are used for lifting the arms above
+the landing gear before the landing maneuver. Finally, two
+Futaba S3003 servos have been employed for building a
+simple gripper, integrating a micro switch in the palm for
+detecting the contact with the object to grasp.
+The developed manipulator satises the following design
+requirements imposed in the rst stage of the design process:
+1) Low weight and inertia.
+2) Mechanical robustness, with high servo protection.
+3) Intersection of the four joint axes in a common point,
+which simplies the inverse kinematics.4) Integration of compliant transmission mechanism.
+5) Integration of deection potentiometers in the joints.
+6) Low clearance for increasing the accuracy in the posi-
+tioning of the end effector.
+All these features contribute to increase the probability of
+success in the application of an aerial manipulation robot to
+inspection and maintenance tasks in outdoor environments.
+FIGURE 6. Kinematic configuration of the anthropomorphic dual arm and
+reference frames of both arms attached to the shoulder joint.
+B. KINEMATICS
+1) KINEMATIC CONFIGURATION
+The anthropomorphic dual arm provides 4 DOF's for end
+effector positioning in a human-like kinematic conguration
+with the shoulder pitch joint at the base, followed by the
+shoulder roll, shoulder yaw and the elbow pitch joint. The
+corresponding joint variables of the output links are denoted
+byqi
+1,qi
+2,qi
+3, and qi
+4, respectively, with iD1;2 for the left
+and right arms. The wrist orientation joints have not been
+implemented in this version. A rendered view of the arms with
+the parameters of the kinematic model is represented in Fig. 6 ,
+including the forearm and upper arm lengths, the separation
+between the arms, and the joint angles with the positive direc-
+tion of rotation given by the right-hand criteria. A reference
+frame Xi
+0Yi
+0Zi
+0attached to the intersection point of the joints
+of the shoulder of each arm is dened, so the tool center
+point (TCP) or any point in the workspace will be referenced
+to this frame. Each arm provides one redundant DOF that
+can be exploited for collision avoidance, null space control,
+or for orienting the end effector. In this work the shoulder
+roll angle is considered as a parameter, qi
+2D'i, which can
+VOLUME 6, 2018 29177
+A. Suarez et al.: Design of an Anthropomorphic, Compliant, and Lightweight Dual Arm for Aerial Manipulation
+be tuned according to the task. For example, in the take-
+off or landing operations, the arms should be in a position
+such that the elbow and wrist points are above the landing
+gear, so'iD90 degrees, whereas in a visual servoing task,
+this angle will take values around 'iD10 degrees.
+2) FORWARD KINEMATICS
+LetFKiV<4!<3represents the forward kinematics of
+thei-th arm. The position of the TCP of each arm is obtained
+multiplying the transformation matrices associated to each
+joint, dened as follows:
+0
+1Ti
+qi
+1
+D2
+664ci
+10si
+10
+0 1 0 0
+ si
+1
+00
+0ci
+1
+00
+13
+775
+1
+2Ti
+qi
+2
+D2
+6641 0 0 0
+0 ci
+2 si
+20
+0
+0si
+2
+0ci
+20
+0 13
+775
+2
+3Ti
+qi
+3
+D2
+664ci
+3 si
+30 0
+si
+3ci
+30 0
+0
+0si
+2
+01 0
+0 13
+775
+3
+4Ti
+qi
+4
+D2
+664ci
+40 si
+40
+0 1 si
+20
+ si
+4
+00
+0ci
+4 L1
+0 13
+775(2)
+Here ci
+jDcos(qi
+j) and si
+jDsin(qi
+j). The upper arm link
+length (from shoulder to elbow) and the forearm length (from
+elbow to TCP) are denoted by L1andL2, respectively. The
+last transformation matrix is referred to the elbow joint, so it
+is displaced the upper arm link length L1. The position of the
+TCP referred to each frame is computed as follows:
+ri
+TCP
+qi
+D2
+4xi
+yi
+zi3
+5DFKi
+qi
+D0
+@4Y
+jD1j 1
+jT
+qi
+j1
+A2
+6640
+0
+ L2
+13
+775(3)
+where qiD[qi
+1;qi
+2;qi
+3;qi
+4]Tis the angular position vector
+of the output link, denoting as iD[i
+1;i
+2;i
+3;i
+4]Tthe servo
+position vector.
+3) INVERSE KINEMATICS
+In order to provide an analytical solution to the inverse kine-
+matics, it was imposed by design that the rotation axis of all
+the joints intersect in a common point. The joint angles of
+the output links can be determined from the desired Cartesianposition applying the inverse kinematics IKiVR3!R4:
+IKi
+ri
+TCP
+DFK 1
+i
+ri
+TCP
+D2
+664qi
+1
+qi
+2
+qi
+3
+qi
+43
+775(4)
+As mentioned before, it is imposed for simplicity that
+qi
+2D'i, considering the angle 'ias a parameter. The elbow
+pitch angle only depends on the position of the TCP and on
+the forearm and upper arm links lengths:
+qi
+4D cos 10
+@s
+x2
+iCy2
+iCz2
+i L2
+1 L2
+2
+2L1L21
+A (5)
+It can be demonstrated that the shoulder pitch joint satises
+the following trigonometric equation whose analytical solu-
+tion is omitted for space reasons:
+xisin
+qi
+1
+Czicos
+qi
+1
+wi (6)
+wiDL2
+2  
+L2
+1Cx2
+iCz2
+i
+C2L1yisin 
+qi
+2
+2L1cos 
+qi
+2 (7)
+Note however that the resulting quadratic equation may
+have two solutions, corresponding to the elbow-up/down
+poses. The shoulder yaw angle is nally obtained:
+qi
+3Datan2
+ai;bi
+(8)
+aiDxisi
+1si
+2Cyici
+2Czici
+1si
+2 (9)
+biDxici
+1 zisi
+1 (10)
+FIGURE 7. Cartesian position/velocity controller based on inverse
+kinematics.
+C. ARMS CONTROL BASED IN INVERSE KINEMATICS
+A position/velocity controller based on inverse kinematics
+has been implemented. The block diagram can be seen in
+Fig. 7. In this example, the arms are operated using a 6-DOF
+mouse that generates the velocity references, although this
+scheme has been also applied to visual servoing. The inverse
+kinematics module generates then the joint references taken
+as input by the low level arms controller, giving as output the
+reference position and play time (PT) sent to the servos.
+29178 VOLUME 6, 2018
+A. Suarez et al.: Design of an Anthropomorphic, Compliant, and Lightweight Dual Arm for Aerial Manipulation
+The proposed scheme exploits the controller embedded in
+all the Herkulex smart servos, which generates a trapezoidal
+velocity prole for reaching the goal position in the desired
+play time. Smooth trajectories can be achieved imposing that
+the position references are sent at the midpoint of the velocity
+prole.
+FIGURE 8. Components and architecture of the compliant dual arm.
+D. HARDWARE/SOFTWARE ARCHITECTURE
+The architecture of the compliant dual arm manipulator is
+depicted in Fig. 8. The components of each arm are the four
+Herkulex servos indicated in TABLE 4, the Murata SV 01A
+deection potentiometers attached to the joints, and a Futaba
+S3003 servo used in the gripper. The servos on each arm
+are connected in daisy chain to the Intel NUC board through
+an USB-to-USART device. As all the servos share the same
+TTL bus, the command/read rate is set to 50 Hz in order
+to prevent high packet loss. The analog signals provided by
+the deection potentiometers are converted by the Analog to
+Digital Converter (ADC) in the STM32VL Discovery micro-
+controller board, which also generates the PWM signals that
+control the servos of the grippers. The microcontroller board,
+programmed in C using the Atollic True Studio IDE, is also
+connected to the Intel NUC computer through the USART
+interface. The control program executed in this board over
+Ubuntu 14.04 was developed in C/C++, making use of the
+cmake tool in order to facilitate the portability of the software
+project between different computer boards. The higher level
+class of the program is the Task Manager, which implements
+several tasks or routines that can be selected by the operator
+from the Ground Control Station (GCS). The task manager
+gathers information from the state of the arms from the
+corresponding threads, providing the reference trajectories to
+the left/right arm controllers. These modules make use of the
+inverse kinematic model described previously for obtaining
+the joint references sent to the embedded servo controller
+through the USART interface.
+IV. COMPLIANT JOINT WITH DEFLECTION FEEDBACK
+A. BENEFITS OF MECHANICAL JOINT COMPLIANCE
+In most industrial manipulators, the torque is estimated from
+the current injected to the motor, or measuring the microdeections of an aluminum structure attached between the
+motor shaft and the output link employing strain gauges.
+However, current-based torque estimation and control lacks
+of accuracy due to the friction of the gearbox, and torque
+sensors based on strain gauges require special electronics
+and a calibration process which increases the cost of the
+devices. What is more, although joint compliance and even
+variable stiffness/impedance can be achieved at software level
+controlling the torque at high rate (1 KHz), the joint is
+intrinsically stiff and therefore less safe than a mechanically
+compliant joint in an environment shared with humans.
+FIGURE 9. Deflection potentiometer integrated in the shoulder roll (left)
+and in the elbow pitch joints (right).
+Introducing exible elements like springs or elastomers
+for transmitting the motion of the motor to the output link
+is a simple and low cost method for providing compliance
+at hardware level. These components act as low pass lters,
+absorbing the energy of impacts and overloads in a passive
+way thanks to their natural dampening. This feature results of
+special interest for protecting the servo actuators against peak
+torques in those situations in which the manipulator enters
+in contact with the environment. A potentiometer or encoder
+can be introduced in the compliant joint for building a simple
+torque sensor based on the deection of the springs. This
+idea was previously introduced in the 3-DOF compliant arm
+prototype, demonstrating experimentally its application to
+force control in [26]. Fig. 9 shows two compact Murata
+SV01A potentiometers integrated in the frame structure of
+two joints of the developed dual arm system. A D-shaped
+shaft attached to the servo horn is inserted in the hollow shaft
+of the potentiometer for measuring the relative rotation of the
+output link with respect to the servo shaft.
+B. SPRING-LEVER TRANSMISSION MECHANISM
+1) MECHANICS
+Two of the main requirement imposed in the arms design,
+mechanical joint compliance and servo protection, have
+been implemented employing the igubal EFOM-08 and
+EFSM-06 ange bearings manufactured by igus. These com-
+ponents provide excellent features that can be exploited in
+the design of low weight robotic arms: low mass density
+w.r.t. steel bearings (1.4 g/cm3vs8.5 g/cm3), low friction,
+maintenance free, high axial and radial load support, and high
+impact and thermal resistance. Also the pivot angle of the ball
+is useful for compensating the misalignment errors associated
+VOLUME 6, 2018 29179
+A. Suarez et al.: Design of an Anthropomorphic, Compliant, and Lightweight Dual Arm for Aerial Manipulation
+FIGURE 10. Shoulder pitch spring-lever mechanism. Full servo protection.
+to the bending of the aluminum frames. Fig. 10 shows the
+EFOM-08 ange bearings installed in the shoulder pitch and
+elbow pitch structures. The double ange bearing in side-by-
+side conguration provides full isolation of the servo against
+axial/radial loads introduced by the crossing shaft. The low
+friction and damping of the iglidur W300 plastic allows the
+smooth rotation of the shaft.
+The spring-lever transmission mechanism consists of a pair
+of compression springs that transmit the motion of the servo
+shaft to the output link. The L-shaped lever frame is screwed
+to the servo horn, pushing the springs that push the T-shaped
+transmission frame of the output link. The design parameters
+of this mechanism are the lever length and the stiffness of the
+springs. The torque-deection characteristic is described in
+more detail in [26]. The torsional stiffness of the compliant
+joint is obtained in the following way:
+i
+jDKi
+j
+li
+j2
+1i
+jDki
+j1i
+j (11)
+where Ki
+jis the stiffness of the compression spring, li
+jis the
+lever length, ki
+jis the equivalent torsional stiffness, and 1i
+j
+is the deection of the j-th joint of the i-th arm, dened as:
+1i
+jDi
+j qi
+j (12)
+This angle is measured by the potentiometer attached at the
+frame structure, as depicted in Fig. 9, allowing the estimation
+and control of the torque.
+2) COMPLIANT JOINT DYNAMICS
+The dynamic model of a compliant joint actuator consists of
+two parts, the servo-side and the output link-side dynamics,
+related through the torque transmitted by the spring-lever
+transmission mechanism. Let us consider an arbitrary joint,
+omitting the indices for clarity in the notation. If m,f, and
+represent the torque generated by the motor, the friction of
+the gearbox, and the torque transmitted to the output link, then
+the following balance equation can be stablished:
+mDbRCfC (13)
+where bis the inertia of the rotor. That is, the torque of the
+servo motor is spent in accelerating the rotor, compensating
+the friction, and pushing the output link. On the other hand,
+the output link will be affected by external forces/torques
+due to contacts, impacts or motion constraints, the gravity,and by the torque introduced from the compliant transmission
+mechanism:
+JRqCmgLsin.q/DCext (14)
+Here m,J, and Lare the mass, inertia, and length of the
+link respectively, whereas gis the gravity constant. Note
+that the common term in equations (14)  (15) is the trans-
+mitted torque . Taking into account equations (12)  (13),
+and the damping due to the friction of the output link shaft
+with the ange bearing, the joint torque can be computed as
+follows:
+Dk. q/Cd P Pq
+Dk1CdP1 (15)
+where dis the joint damping. This equation shows that the
+torque can be estimated from the joint position and veloc-
+ity signals provided by the servo and the deection sensor.
+It is necessary to remark that most low cost servos only
+accept as input position references, but torque estimation
+and control can be achieved thanks to the deection of the
+springs.
+The Herkulex servos were experimentally characterized in
+the time and frequency domains, concluding that a rst-order
+dynamics with delay models properly the actuator:
+G.s/D
+refDeTdelays
+1CTservos(16)
+where TdelayD0:02[s] is the time delay associated to the
+serial interface, and TservoD0:035[s] is the time constant.
+3) DUAL ARM MANIPULATOR DYNAMICS
+The dynamic model of a compliant joint manipulator can be
+expressed in the usual matrix form, obtaining the equations
+of motion from the Euler-Lagrange method based on the
+Lagrangian and the generalized equation of the forces and
+torques. References [30] and [31] can be followed for a more
+in detail description of the modeling and control of compliant
+joint manipulators.
+As in the single joint case, the equations of the dynamic
+model of a compliant joint arm can be divided into two parts.
+Firstly, the servo-side dynamics includes the torque of the
+motor, the friction of the gearbox, the torque transmitted by
+the spring-lever mechanism, and the inertia of the rotor:
+i
+mDBi
+i
+RiCi
+fCi(17)
+Here Bi2R44is the servo inertia matrix, and i
+m,i
+f, and
+i2R4are the motor, friction and transmitted torques of the
+i-th arm. Now, the output link dynamics includes the inertia,
+Coriolis and centrifugal terms, and the gravity component:
+Mi
+qi
+RqiCCi
+qi;Pqi
+CGi
+qi
+DiCi
+ext (18)
+where MiR44is the output link inertia matrix, Ciand
+Gi2R4are the Coriolis and gravity terms, respectively, and
+i
+ext2R4is the torque due to external forces exerted over the
+29180 VOLUME 6, 2018
+A. Suarez et al.: Design of an Anthropomorphic, Compliant, and Lightweight Dual Arm for Aerial Manipulation
+i-th arm. The common term in (17) and (18) is the torque i
+which can be estimated from the joint deection:
+iDKi
+i qi
+CDi
+Pi Pqi
+DKi1iCDi1Pi
+(19)
+where KiDdiag(ki
+j) and DiDdiag(di
+j)2R44are the
+joint stiffness and damping matrices, respectively.
+C. AERIAL MANIPULATOR DYNAMICS
+The derivation of the complete dynamic model of a dual arm
+aerial manipulator is out of the scope of this work, although
+previous research in dual arm space manipulators [32] and
+underwater manipulators [33] are suggested. In our previous
+work [28] we developed the equations of the Euler-Lagrange
+formulation for a stiff-joint dual arm aerial robot, expressed
+in the usual matrix form with the inertia, Coriolis and gravity
+terms. In the case of the compliant manipulator described in
+this paper, the vector of generalized coordinates 2R22
+includes both the servo and the output link angular position
+vectors, as well as the UA V position and attitude vectors, r
+and2R3, respectively:
+Dh
+rTT1;Tq1;T2;Tq2;TiT
+(20)
+The vector of generalized forces 02R22includes the
+forces and torques acting over the aerial platform, FUAVand
+UAV2R3, the torqueitransmitted by the motors, and the
+external torque i
+extacting over the output links:
+0Dh
+FT
+UAVUAVT1;T1;T
+ext2;T2;T
+extiT
+(21)
+The equations of the dynamic model are obtained from the
+Lagrangian Land the generalized equation of the forces and
+torques.
+d
+dt@L
+@P
+ @L
+@D0ILDK V (22)
+where KandVare the kinetic and potential energy of the
+system, respectively. Note that the potential energy includes
+two terms, the gravitational potential and the elastic potential
+energy associated to the exible joints, which depends on the
+joint stiffness and the deection angle. After some work, it is
+possible to express the model in the following matrix form:
+M./RCC 
+;P
+CG./CK./CD 
+;P
+D0 (23)
+where M2R2222is the generalized inertia matrix, C2
+R22represents the centrifugal and Coriolis terms, G2R22
+is the gravity component of the wrenches, whereas Kand
+D2R22are the components associated to the deection and
+the friction of the compliant joints. According to the notation,
+all these terms depend on the generalized coordinate vec-
+tor, or well on a specic group of coordinates. The position
+of the manipulator relative to the base of the aerial platform
+and the angular position of the links modies the value of
+the inertia matrix and the thrust that the propellers should
+deliver to compensate the torque due to gravity when thecenter of mass is displaced. In general, it is convenient that the
+manipulator is as close as possible to the geometric center of
+the UA V, maintaining the symmetry in the mass distribution,
+although from the theoretical point of view, the particular
+location of the arms does not affect the model.
+FIGURE 11. Geometric model considered for deriving the force-torque
+relationships.
+D. FORCE-TORQUE RELATIONS
+1) GEOMETRIC INTERPRETATION
+In many manipulation operations it is necessary to estimate
+and control the contact forces at the end effector. This can be
+done measuring the deection of the joints and applying the
+force-torque relations. These can be obtained in two steps: 1)
+compute the torque vector i
+jDFi
+jri
+jfor all the joints, that
+is, the cross product between the force acting over the link
+of the joint and its position, and 2) project the torque on the
+corresponding joint axis. The matrix representation is then
+obtained. Let consider the diagram shown in Fig. 11, where
+S,EandWare the shoulder, elbow and wrist points referred
+to frame 0iattached to the shoulder joint. These points, whose
+position vectors are rsD0,reandrw, dene the SEW
+plane and the normal vector nsew. The elbow and wrist points
+are obtained from the forward kinematic model. From now
+on, superscript iis omitted for clarity in the notation. The
+normalized position vectors shoulder-elbow and elbow-wrist
+are denoted by useanduew, and are dened as follows:
+useDre
+krek(24)
+uewDrw re
+krw rek(25)
+The normal vector to the SEW plane can be computed as:
+nsewDuseuew
+kuseuewk(26)
+It will be assumed that the contact force Fis applied at the
+wrist point. The torque supported by the elbow pitch and the
+shoulder yaw joints is rstly obtained from the vector:
+ewDF.rw re/ (27)
+VOLUME 6, 2018 29181
+A. Suarez et al.: Design of an Anthropomorphic, Compliant, and Lightweight Dual Arm for Aerial Manipulation
+Now, the projection of this torque vector in the direction
+of the rotation axis of each joint provides the corresponding
+joint torque. In the case of the elbow joint, the direction of
+rotation is parallel to nsewand thus:
+4DnT
+sewew (28)
+The axis of rotation of the shoulder yaw joint is use, so:
+3DuT
+seew (29)
+The torque in the shoulder roll and pitch joints is obtained
+in a similar way, considering the shoulder-to-wrist vector and
+the direction of rotation of these joints:
+swDFr w (30)
+2D[cosq1;0;sinq1]sw (31)
+1D[0;1;s0]sw (32)
+Equations (28)  (32) can be rewritten in matrix form,
+in such a way that the torque-force relation is linear. This is
+done expressing the cross product as matrix multiplication
+using a skew-symmetric matrix dened as follows:
+FrDF2
+4rx
+ry
+rz3
+5D2
+40 rzry
+rz0 rx
+ ryrx03
+5FDAF
+(33)
+2) JACOBIAN-BASED INTERPRETATION
+The force at the end effector can be computed from the joint
+torque and the Jacobian of the manipulator. Assuming that
+the contact force control task is executed in static or close to
+static conditions, the torque can be computed easily from the
+joint deection and the joint stiffness matrix (neglecting the
+damping), so the force vector in task space will be given by:
+FiD
+Ji;T 1
+iD
+Ji;T 1
+Ki1i(34)
+Here Ji2R34is the Jacobian of the i-th manipulator, and
+KiDdiag(ki
+j)2R44is the corresponding joint stiffness
+matrix.
+3) CARTESIAN DEFLECTION
+It is interesting to note that, if qiis replaced by iin Equa-
+tion (3), then FKi(i) would represent the forward kinemat-
+ics of an equivalent stiff joint manipulator. The difference
+between the position of the TCP in this virtual manipulator
+and in the compliant arm is dened as the Cartesian deec-
+tion,1li:
+1liDFKi(i) FKi
+qi
+(35)
+The Cartesian deection represents the deviation in the
+position of the TCP due to the deection of the compliant
+joints. This concept is useful if, for example, a camera head
+gives the 3D position of a marker attached at the end effector,
+as it would allow the estimation and control of contact forces
+directly in the task space, increasing at the same time the
+FIGURE 12. Cartesian deflection measured on the left arm by means of a
+red color marker attached at the TCP and a stereo camera head.
+positioning accuracy. This has been represented in Fig. 12.
+In static conditions, the contact force will be proportional to
+the Cartesian deection:
+FiDKi
+C1li(36)
+where the Cartesian stiffness matrix Ki
+C2R33is
+obtained from the joint stiffness matrix and the Jacobian:
+Ki
+CD
+Ji;T 1
+Ki
+s
+Ji 1
+(37)
+According to this equation, the Cartesian stiffness will vary
+with the position of the joints. In particular, innite stiffness
+is associated to the kinematic singularities of the arms.
+FIGURE 13. Relative distances between the center of mass of the links
+(left) and global center of mass of the left arm (right). Lenghts in mm.
+V. ARMS FRAME STRUCTURE
+This section details the construction of the different links of
+the arms, providing the mass and inertia parameters obtained
+from the CAD model, which are summarized in Fig. 13 and
+TABLE 5. The denition of the XYZ axes associated to the
+CoM of each structure is shown in the gures below. This
+29182 VOLUME 6, 2018
+A. Suarez et al.: Design of an Anthropomorphic, Compliant, and Lightweight Dual Arm for Aerial Manipulation
+TABLE 5. Mass in and inertia parameters of the links.
+section does not consider the mass and inertia of the spring-
+lever transmission frames as these parameters are negligible
+w.r.t. the corresponding output links.
+FIGURE 14. CoM and dimensions (in mm) of the shoulder pitch structure.
+A. SHOULDER PITCH STRUCTURE
+This structure provides full protection to the Herkulex DRS-
+0201 servo. The radial and axial loads are supported by the
+igubal EFOM-08 ange bearings installed in side-by-side
+conguration, allowing the rotation of the shaft that connects
+the shoulder roll structure with the compliant transmission
+mechanism of the shoulder pitch joint. These components
+also provide vibration dampening and smooth rotation of the
+shaft. Fig. 14 shows a rendered view of this structure along
+with the XYZ axes to which the inertia moments are referred,
+as well as the dimensions in mm. The structure is built from
+two U-shaped aluminum parts manufactured by laser cut,
+2 mm thickness and 25 mm width. The space left between the
+servo horn and the inner ange bearing (21 mm) is allocated
+for installing the spring lever mechanism and the deection
+potentiometer. The assembly of the spring lever mechanism
+and the shoulder roll structure can be seen in Fig. 10.
+B. SHOULDER ROLL STRUCTURE
+This structure, whose rendered view is depicted in Fig. 15,
+provides partial protection to the Herkulex DRS-0201 servo
+through an igubal EFOM-08 ange bearing installed over
+the aluminum support frame on the back of the actuator.
+The shoulder yaw structure, described in next sub-section,
+is supported by this ange bearing and by the servo horn. The
+8 mm Ø shaft crosses the EFOM-08 pair at the shoulder pitch
+structure, connecting the shoulder pitch transmission with the
+FIGURE 15. CoM and dimensions (in mm) of the shoulder roll structure.
+shoulder roll support frame. The shaft ts in a T-shaped frame
+in such a way that there is no clearance causing a dead-zone
+at the end effector.
+FIGURE 16. CoM and dimensions (in mm) of the shoulder roll structure.
+C. SHOULDER YAW STRUCTURE
+A pair of igubal EFSM-06 ange bearings screwed into the
+base of a U-shaped frame support the rotation of the upper
+arm link and the compliant transmission. A third component
+attached to the inner side of the frame allows the rotation of
+this structure around the shoulder roll shaft, whereas the 8 mm
+Ø shaft in the opposite side is inserted in the EFOM-08 ange
+bearing of the shoulder roll structure. A rendered view of the
+assembly and the dimensions can be seen in Fig. 16.
+FIGURE 17. CoM and dimensions (in mm) of the shoulder roll structure.
+D. UPPER ARM LINK
+This assembly, shown in Fig. 17, is similar to the shoulder
+roll structure, although in this case the transmission frame on
+VOLUME 6, 2018 29183
+A. Suarez et al.: Design of an Anthropomorphic, Compliant, and Lightweight Dual Arm for Aerial Manipulation
+the right of the 6 mm Ø prole is rotated 90 deg with respect
+to the servo support frame. This shaft passes through the pair
+of EFSM-06 ange bearings of the shoulder yaw structure.
+This solution, in which the elbow pitch servo is placed at the
+elbow joint, is not convenient in terms of inertia, but it avoids
+introducing a transmission mechanism, reducing the weight
+and complexity in the design and the assembly.
+FIGURE 18. CoM and dimensions (in mm) of the forearm structure.
+E. FOREARM LINK
+The forearm link consists of a 6 mm Ø link connected to
+the elbow joint through a U-shaped frame and a pair of
+EFSM-06 ange bearings in side-by-side conguration.
+A rendered view of the assembly is represented in Fig. 18.
+The EFOM-08 ange bearing is inserted into the servo shaft,
+asFig. 9 shows, using a M3 screw on the opposite side as sec-
+ond support point in the elbow pitch base frame. Although
+the current version does not implement the wrist orientation
+mechanism, the EFSM-06 pair allows the rotation of the end
+effector around the axis dened by the forearm link (wrist roll
+angle).
+VI. EXPERIMENTAL RESULTS
+This section presents experimental results for characterizing
+and validating the developed anthropomorphic, compliant
+and lightweight dual arm manipulator. The resonance fre-
+quencies of the compliant joints are identied, showing the
+response to impacts against the end effector. Zero deection
+control in grabbing situations and bimanual object grasping
+experiments have been also conducted. For clarity in the
+evaluation of the concepts of interest, the graphical results
+correspond to xed base experiments, as the conditions for
+the outdoor ight tests are less controllable. Finally, bimanual
+grasping on ight has been demonstrated in outdoors.
+A. FREQUENCY ANALYSIS
+Each individual compliant joint can be assimilated to a mass-
+spring-damper system characterized by its natural frequency.
+In a compliant joint manipulator, the distribution of the mass
+will vary with the position of the joints, and so the resonance
+frequencies. Furthermore, the deection of one joint may
+excite another joints due to dynamic coupling. The goal of
+this experiment is identifying these behaviors in the dual
+arm manipulator, introducing a chirp (or sweep) signal in the
+FIGURE 19. Elbow pitch (blue) and shoulder pitch (green) joint deflection
+for a 15 deg chirp signal generated by the elbow pitch servo (black).
+elbow joint for this purpose. The elbow servo will generate
+a 15 deg amplitude oscillation, increasing the frequency lin-
+early with the time from 0 up to 8 Hz in 60 seconds:
+1;2
+4;ref.t/D1;2
+4;offsetC15sin8t2
+60
+(38)
+Two representative congurations for the dual arm are
+considered depending on the offset angle of the elbow: arms
+fully stretched (1;2
+4;offsetD0deg), and L-shaped exion of
+the elbow (1;2
+4;offsetD90deg.) Fig. 19 shows the evolution of
+the elbow pitch servo position along with the elbow pitch and
+the shoulder pitch deection signals. No ltering was applied
+to these signals. As it can be seen, two resonance modes are
+identied in tD12sand in tD45s. The rst one is coupled
+to the shoulder pitch joint, whereas the second one mainly
+affects to the elbow joint. It is interesting to note that, at the
+resonance frequency of the rst mode, the relative phase of
+the elbow pitch deection signal drops 180 deg with respect
+to the servo position. This can be appreciated more clearly in
+Fig. 20. As the amplitude of the servo rotation is similar to the
+joint deection but with different sign, the apparent effect is
+that the forearm link is not oscillating, which is conrmed by
+visual inspection of the experiment.
+The Fast Fourier Transform (FFT) algorithm was applied to
+the signals depicted in Fig. 19 for obtaining a frequency rep-
+resentation of the servo bandwidth and the resonance peaks
+of the compliant joints. These can be identied clearly in
+Fig. 21. The rst resonance mode (f 1D1:624 Hz) affects to
+the elbow pitch and shoulder pitch joints, whereas the second
+mode (f 2D5:92 Hz) only affects to the elbow joint and it has
+a wider bandwidth than the rst one. The servo actuator is not
+able to follow the chirp reference from fD1:5Hz due to its
+limitations in speed and torque.
+The variation in the frequency response of the compliant
+arm due to the rotation of the elbow joint is evidenced in
+Fig. 22. In this case, as the distance from the center of mass of
+the arm to the shoulder joint is lower, the resonance frequency
+29184 VOLUME 6, 2018
+A. Suarez et al.: Design of an Anthropomorphic, Compliant, and Lightweight Dual Arm for Aerial Manipulation
+FIGURE 20. Detailed view of the servo position and the joints deflection.
+Before the first resonance peak the deflection is in phase with the servo
+(up), dropping 180 deg in the second resonance peak (down).
+FIGURE 21. FFT applied to the elbow pitch servo (black) and to the elbow
+pitch (blue) and shoulder pitch (green) joint deflection. The resonance
+frequencies are identified at f1D1:6Hzandf2D5:9Hz.
+increases, varying from f1D1:624 Hztof1D2:075 Hz. The
+amplitude of the second resonance mode is also higher due to
+the effect of gravity over the forearm link mass.
+The identication of the resonance frequencies is useful for
+anticipating and preventing undesired behaviors of the aerial
+manipulator on ight, as these modes may be excited due to
+the dynamic coupling with the aerial platform or the control
+loop. Also the value of the joint damping can be determined
+experimentally from these gures, known the joint stiffness
+(TABLE 4) and link inertia (CAD model) parameters.
+B. IMPACT RESPONSE
+This experiment shows the response of the compliant joints
+when the end effector suffers the impact of a 62 g weight
+object thrown from a height of 57 cm, which corresponds to
+FIGURE 22. FFT applied to the elbow pitch servo (black), the elbow pitch
+(blue) and shoulder pitch (green) joint deflection. The spectrum and
+resonance frequencies have changed along with the mass of the arm.
+FIGURE 23. Impact response: acceleration at the TCP (up) and joints
+deflection (down).
+a potential energy of 0.35 J. The setup consisted of a drylin
+T rail guide system TS-04-15 installed in vertical position,
+and a TW-04-15 carriage manufactured by igus Rthat slides
+along the rail. An accelerometer was attached under the end
+effector of the left arm (see Fig. 4), where the carriage will
+impact. Fig. 23 represents the acceleration at this point and
+the deection of the elbow pitch and shoulder pitch joints
+in two consecutive impacts. The reference position for these
+joints were1
+1D0 and1
+4D 90 deg. Note that the springs
+in the compliant joints act as low-pass lters, so the high
+frequency component of the energy generated by the impact
+is attenuated thanks to the natural damping of the springs
+and the bearing. This prevents that the shaft of the servos
+are damaged due to peak forces associated to the transition
+VOLUME 6, 2018 29185
+A. Suarez et al.: Design of an Anthropomorphic, Compliant, and Lightweight Dual Arm for Aerial Manipulation
+from contactless to contact situations, improving the safety
+and robustness of the manipulator during the realization of
+tasks involving physical interaction with the environment.
+C. ZERO DEFLECTION CONTROL IN CLOSED
+KINEMATIC CHAIN
+Let us consider an operation in which the aerial manipulator
+has to grab a long bar using both arms. The bar is left on a
+bench in such a way that it is necessary to pull it upwards for
+retrieving it while the aerial platform is hovering in a xed
+position above the bench. The motion constraints associated
+to grabbing situations may generate undesired forces that,
+when exerted over the aerial platform, will cause positioning
+drifts or even crashes if the UA V controller is not able to
+deal with them. What is more, the actuators in a stiff joint
+manipulator might be damaged if there is no torque feedback
+available to detect and compensate joint overloads. In order
+to reduce the inuence of contact forces during grabbing
+phases, this work proposes a simple method that exploits the
+joint deection in the developed manipulator. The idea is to
+implement a joint deection controller that tries to maintain
+a zero deection reference, or what is the same, a zero joint
+torque. With that, the manipulator will be able to compensate
+position deviations without disturbing the platform.
+In this experiment, a low weight plastic box representing
+an inspection tool is grasped from a 35 cm length horizontal
+handle using both arms, forming a closed kinematic chain.
+A calibration process is previously executed for obtaining
+the voltage offset of the deection potentiometers. After that,
+the zero deection controller is enabled. A simple propor-
+tional controller provides the incremental joint position of the
+servos using the deection feedback:
+i
+j;refDi
+jCKp1i
+j (39)
+Here Kpis the proportional gain. When the grasped object
+is pulled or pushed by hand, the external force will cause the
+deection of the joints. However, the elastic potential energy
+stored in the springs will be actively released by the servos,
+in such a way that the deection will tend to zero. Fig. 24
+andFig. 25 represent the Cartesian position and the joint
+deection of both arms when the object is guided following
+an elliptical trajectory over the XZ plane. Fig. 26 shows the
+same signals when the object is guided in the X, Y and Z
+axes separately, which allows to identify the involved joints
+on each axis more clearly.
+D. BIMANUAL GRASPING: OUTDOOR FLIGHTS
+Outdoor ight tests were conducted for validating the dual
+arm design, demonstrating the bimanual grasping capability.
+The arms were integrated in a DJI Matrice 600 hexarotor for
+this purpose along with an Intel NUC computer board, a ZED
+stereo camera for visual servoing, a 5.8 GHz wireless link,
+and the batteries. The experiment consisted of six phases: 1)
+take off, 2) approach to the inspection tool installed on a PVC
+pipe, 3) move the arms to the operation position, 4) activate
+visual servoing, 5) retrieve the inspection tool, and 6) release
+FIGURE 24. Cartesian position of the TCP of both arms when the grasped
+object is pushed following a circular trajectory in the XZ-plane.
+FIGURE 25. TCP position and joint deflection for the circular trajectory.
+the tool. The setup and the execution of the experiment are
+represented in Fig. 27 andFig. 28.
+The UA V was radio-controlled in position by an expert
+human pilot while an operator took care of the arms from a
+ground control station (GCS). The tests were conducted in a
+664 meters area covered by a safety net. The purpose
+of the developed scenario was illustrating the application of
+dual arm aerial manipulators to installation and retrieval of
+inspection tools deployed in areas of difcult access such as
+high altitude pipes in chemical plants.
+The grasping method consisted of guiding the TCP of the
+left and right arms from their initial position to the grasping
+points applying the control method shown in Fig. 7, closing
+the grippers when the goal point is reached. The grasping
+points provided to the arms controller are obtained from the
+vision algorithm described in [34]. A ZED stereo camera
+attached to the shoulder structure was employed due to its
+wide eld of view and high image quality. Fig. 29 shows
+29186 VOLUME 6, 2018
+A. Suarez et al.: Design of an Anthropomorphic, Compliant, and Lightweight Dual Arm for Aerial Manipulation
+FIGURE 26. Cartesian position of the TCP of left/right arms (up) and
+joints deflection (down) when the grasped object is pushed along the
+X (0  12 s), Y (15  22 s) and Z (22  40 s) axes.
+FIGURE 27. Compliant dual arm integrated in DJI Matrice 600 hexarotor.
+Take-off (1), approaching to inspection tool installed on pipe (2  3), and
+visual servoing (4  6). The target points are out of the reach of the arms
+due to the displacement of the aerial platform (5  6).
+the trajectory of the TCP of left and right arms along with
+the grasping points given by the vision module during the
+ight experiment. Positioning errors are mainly due to non-
+compensated joint deections and to misalignment errors
+between the arms frame and the camera frame. The control
+period and velocity were set to TD0:1s, and the reference
+velocity of the arms was set to vD0:2m=s.
+The analysis of the video of the outdoor ight tests reveal
+that the inuence of arms motion over the attitude controller
+in contactless situations is almost negligible, since the mass
+FIGURE 28. Bimanual object grasping on flight. The arms grasp the
+inspection tool installed over a pipe by a 50 cm length handle.
+FIGURE 29. TCP Cartesian position of left/right arms. Grasping points
+given by the vision (red), reference (black) and servo feedback (blue).
+and inertia of the manipulator is very low compared to the
+mass of the multirotor. In [28] we proposed a method for
+estimating and compensating the reaction torques induced by
+a stiff-joint dual arm over the base of the aerial platform,
+identifying separately the gravity, Coriolis, and inertia terms.
+The torque due to gravity is associated to variations in the
+position of the end effector, and it is more evident when an
+object is grasped and lifted, although it is typically cancelled
+by the integral term of the attitude controller. The effect of
+the other two dynamic terms can be limited simply adjusting
+the maximum joint/Cartesian speed of the arms, at expenses
+of reducing the time performance.
+VII. CONCLUSION
+This paper detailed the design and mechanical construction of
+an anthropomorphic, compliant and ultra-lightweight (1.3 kg)
+dual arm manipulator developed for its integration in a
+VOLUME 6, 2018 29187
+A. Suarez et al.: Design of an Anthropomorphic, Compliant, and Lightweight Dual Arm for Aerial Manipulation
+multi-rotor platform. Both left and right arms provide 4-DOF
+for end effector positioning in a human-like kinematic cong-
+uration. The robust aluminum frame structure and the use of
+a simple and compact spring-lever transmission mechanism
+introduced in all the joints provide a high level of protection to
+the servo actuators against impacts and joint overloads. This
+features is highly convenient for reducing the cost and time
+associated to repairs, as the servo actuators represent around
+the 70% of the cost in materials of the manipulator. One of
+the main conclusions derived from the experiments is that
+the capacity of the compliant joints to support impacts and
+joint overloads associated to motion constraints increases the
+probability of success in a grasping task with respect to a
+stiff joint manipulator. The mechanical tolerance of the joints
+also results extremely useful for the realization of several
+tasks involving the cooperation of both arms, as bimanual
+grasping, without requiring a highly accurate coordination of
+the arms. As future work, it would be necessary to evaluate
+the accuracy and reliability of the force-torque estimation
+method.
+ACKNOWLEDGMENT
+The authors wish to acknowledge the support provided by
+V. Vega in the realization of the outdoor ight tests.

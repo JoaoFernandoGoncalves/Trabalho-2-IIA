@@ -1,0 +1,453 @@
+Biomimetic Design and Kinematic Analysis of a
+Rope-driven Soft Robotic Arm
+1stRuile Ma
+School of Electrical and Information Engineering
+Zhengzhou University
+Zhengzhou, China
+2521394302@qq.com2ndJinzhu Peng∗
+School of Electrical and Information Engineering
+Zhengzhou University
+Zhengzhou, China
+jzpeng@zzu.edu.cn
+3rdPengfei Yu
+School of Electrical and Information Engineering
+Zhengzhou University
+Zhengzhou, China
+2816148757@qq.com4thNan Zhao
+Department of Artificial Intelligence Business
+Zhengzhou JD Cloud Computing Co., Ltd.
+Zhengzhou, China
+zhaonan8@jd.com
+Abstract —Soft robotic arms have strong adaptability and
+their broad application prospects have been attracted increasing
+attention. In this paper, the structure of a kind of rope-driven
+soft robotic arm is designed based on the biological character-
+istics, and its kinematic model is established based on constant
+curvature analysis. The spatial posture and end position of the
+soft robotic arm are obtained through numerical simulations,
+and the results reveal the reachable workspace of the designed
+soft robotic arm. In addition, based on the inverse kinematics
+of soft robotic arm, the circular trajectory planning is analyzed
+and discussed. The experimental results of spatial posture and
+trajectory planning are consistent with the simulation results,
+which indicates that the designed soft robotic arm structure is
+reasonable and the kinematic analysis is correct.
+Keywords —soft robotic arm, biomimetic design, kinematic anal-
+ysis, circular trajectory planning
+I. I NTRODUCTION
+Most of the traditional rigid robotic arms are assembled
+by components with certain hardness, which have low safety
+and poor movement flexibility when contacting with people
+and fragile objects. Especially in the face of unstructured
+complex environments, traditional robotic arms are difficult
+to efficiently complete tasks due to their rigid structure.
+The development of bionics has brought inspiration to the
+emergence of soft robotic arms. The difference between soft
+robotic arms and conventional robotic arms is that their partial
+structures are made of soft materials [1]. Soft robotic arms
+can flexibly change their shapes in complex environments and
+complete some tasks that traditional rigid robotic arms cannot
+accomplish.
+According to different driving modes, soft robotic arms
+can be divided into gas-driven, shape memory alloy-driven,
+electroactive polymer-driven, rope-driven, and so on [2]. The
+This work is supported in part by the National Natural Science Foundation
+of China (62273311, 61773351), and in part by Henan Provincial Science
+Foundation for Distinguished Young Scholars (242300421051), and in part
+by Zhengzhou JD Cloud Computing Co., Ltd.pneumatic soft robotic arms have high adaptability, but there
+are also many drawbacks, sucn as low effective load capacity,
+large energy consumption, complex gas transmission system,
+slow response speed, and high production standard [3]. Al-
+though the full body weight of the robotic arms driven by
+electroactive polymer and shape memory alloy is light, the
+output force generated is small. In addition, higher power
+requirements and specific temperature changes are required,
+and the shape changes are limited [4,5]. The rope-driven
+soft robotic arms have high research value due to structural
+stability, operability and positioning accuracy, but it is difficult
+to wrap larger objects because of the length of rope [6].
+Soft materials give the soft robotic arms excellent flexibility
+and security, but they also bring great difficulties to theoretical
+analysis, especially modeling. At present, the main modeling
+methods of soft robotic arms include finite element modeling,
+constant curvature modeling, variable curvature modeling, and
+data-driven modeling. The finite element modeling has good
+universality, but its cost is high and the process is complex [7].
+The method of constant curvature modeling is simple, compu-
+tationally efficient, and more suitable to model-based control
+[8]. Currently, it is the most widely used, but its accuracy is
+relatively low. Although the accuracy of the variable curvature
+modeling method has improved, its calculation is complicated,
+which is not applicable for model-based control [9]. The data-
+driven modeling has strong applicability, but data collection
+and training are difficult [10].
+The main work of this article is as follows: Firstly, the
+structure of a kind of rope-driven soft robotic arm is designed
+by learning biological features, and the ingenious and novel
+biomimetic design enables the soft robotic arm to have multi-
+ple working modes, stronger adaptability, and higher stability.
+Secondly, based on the assumption of constant curvature,
+kinematic analysis is conducted on the soft robotic arm to
+achieve precise posture control. Thirdly, simulations of spatial
+posture and workspace are carried out, and experiments are
+209
+979-8-3503-5030-2/24/$31.00 ©2024 IEEE2024 9th International Conference on Automation, Control and Robotics Engineering (CACRE) | 979-8-3503-5030-2/24/$31.00 ©2024 IEEE | DOI: 10.1109/CACRE62362.2024.10635043
+
+conducted on the actual prototype. The consistency between
+simulation results and experimental results verifies the ratio-
+nality of the structural design and the effectiveness of forward
+kinematics. Finally, the circular trajectory planning is analyzed
+and discussed based on inverse kinematics, which verifies the
+correctness of inverse kinematics.
+II. B IOMIMETIC DESIGN AND MANUFACTURE
+Through observation, the elephant’s trunk is very flexible, it
+can easily roll up heavy objects, and the liquid suction exper-
+iment shown in Fig. 1 demonstrates that the elephant’s trunk
+can absorb different objects [11]. Introducing this versatility
+into the design of a robotic arm can make it more adaptable
+and diverse in different scenarios and tasks. In addition, the
+lamellae on gecko’s toes can enhance contact adaptation and
+reduce contact impacts [12]. The similar lamellae on the
+surface of a robotic arm can enhance the contact adaptability,
+and improve its stability when wrapping objects. As shown
+in Fig. 1, we produce an actual prototype of a biomimetic
+rope-driven soft robotic arm based on the designed 3D model
+by the idea of the elephant’s trunk and the lamellae on the
+gecko’s toes.
+To achieve stable structure, strong operability, and high
+positioning accuracy, we design a rope-driven soft robotic arm.
+The arm body is a hollow structure made of silicone, and
+the spring skeleton set in the cavity is similar to the longi-
+tudinal muscles of the elephant’s trunk, providing structural
+support and deformation ability to adapt to different working
+conditions. The air pipe passes through the inner cavity of
+the spring skeleton, connecting the air pump and the suction
+cup at the end of the arm. When it is difficult to wrap due
+to the rope length limitation, the suction cup functions as
+an elephant’s nostril to adsorb objects, compensating for the
+shortcomings of the rope-driven method. The lamellae on the
+surface of the arm can improve the contact adaptability, adapt
+to different shapes of object surfaces, and improve stability
+and controllability when wrapping objects. The four fishing
+lines distributed evenly in the arm body, are pulled by four
+servos assembled on the base of the robotic arm to deflect
+and bend the arm body.
+To sum up, the soft robotic arm can achieve two func-
+tions of wrapping and adsorbing objects, with high flexibility
+and adaptability. Compared with other robotic arms, the soft
+robotic arm can adapt to unstructured complex environments
+and complete diverse tasks more efficiently.
+III. K INEMATIC ANALYSIS
+According to experimental observations, it can be concluded
+that the curvature of each part of the arm during bending is
+basically consistent, indicating that the bending shape of the
+robotic arm is approximately circular arc. Becasue the robotic
+arm only perform simple movements, we can use constant
+curvature modeling to analyze reasonably and simplify cal-
+culations. We propose three assumptions based on the above
+observation.
+Elephant’s trunk
+Gecko’s toes
+Overall model
+ Arm body Cutaway 
+Actual prototype
+3D model of the soft robotic armActual prototype of the soft robotic arm
+Drive 
+device
+Elephant’s trunk and gecko’s toesWrapping
+Adsorbing
+LamellaeFig. 1. Biomimetic desigh and manufacture of the soft robotic arm.
+Assumption1 : The bending curvature of the arm body is a
+constant.
+Assumption2 : Neglecting the influence of gravity on the
+bending of the arm body.
+Assumption3 : The shape of the arm body is simplified to a
+cylinder.
+Define three bending parameters ( ϕ θ r ) based on the above
+assumptions [13], ϕis the deflection angle between the plane
+where the arm body is located and the xoz plane, θis the
+central angle, and rrepresents the bending radius.
+x
+y
+zOr
+z1x1
+y1O1θ
+ φ
+ 
+(a) Schematic diagram
+x
+y
+z
+z1x1
+y1O
+O11
+234φ
+ θ
+ r (b) Simplified diagram
+x
+yO 1
+234
+φ R
+r
+(c) Top view
+θ
+ 
+1234r O
+O1 z (d) Side view
+Fig. 2. Kinematic analysis of constant curvature.
+The change of fishing line’s length can be expressed as,
+li=L−qi (1)
+where Lis the original length of each fishing line, qiandli,
+i= 1,2,3,4are changing length and current length of each
+fishing line in the arm body. By analyzing, we can get,
+
+
+l=1
+44P
+i=1li
+q=1
+44P
+i=1qi(2)
+210
+
+where qandlrepresent the changing length and current length
+of the central arc of the arm.
+From Fig. 2 (c) and (d), the current length of each fishing
+line can be represented by bending parameters as,
+
+
+l1=θ(r−Rcosϕ)
+l2=θ(r−Rsinϕ)
+l3=θ(r+Rcosϕ)
+l4=θ(r+Rsinϕ)(3)
+where Rrepresents the cross section radius of the arm body.
+According to (1), (2), and (3), bending parameters can be
+expressed as,
+ϕ= arctanq4−q2
+q3−q1(4)
+θ=q
+(q3−q1)2+ (q4−q2)2
+2R(5)
+r=2(L−q)Rq
+(q3−q1)2+ (q4−q2)2(6)
+Changing length of each fishing line in the arm body can
+be represented as,
+qi=ξiRd (7)
+where ξiandRdrepresent the rotation angle and radius of
+servo disk, respectively. Then, by substituting (7) into (4), (5)
+and (6), bending parameters can be expressed as,
+ϕ= arctanξ4−ξ2
+ξ3−ξ1(8)
+θ=q
+(ξ3−ξ1)2+ (ξ4−ξ2)2
+2R(9)
+r=2(L−q)Rq
+(ξ3−ξ1)2+ (ξ4−ξ2)2(10)
+where q=1
+4Rd4P
+i=1ξi, and the forward kinematics is com-
+pleted through the above steps.
+The motion process of the arm body can be regarded as
+two steps: the soft robotic arm firstly rotates angle θaround
+the y-axis and then rotates angle ϕaround the z-axis [14].
+The homogeneous transformation matrix from the origin of
+the base coordinate system to the origin of the end coordinate
+system can be obtained according to the two-step motion
+transformation as,
+T=Rz(ϕ) 0
+0 1Ry(θ)p
+0 1
+=
+cosϕcosθ−sinϕcosϕsinθlcosϕ(1−cosθ)
+θ
+sinϕcosθcosϕ sinϕsinθlsinϕ(1−cosθ)
+θ
+−sinθ 0 cos θlsinθ
+θ
+0 0 0 1
+
+(11)The pose matrix of the endpoint can be expressed as,
+Tp=
+αxβxγxpx
+αyβyγypy
+αzβzγzpz
+0 0 0 1
+(12)
+where p(px, py, pz)represents the endpoint’s coordinate,
+(αx, αy, αz)T,(βx, βy, βz)T, and (γx, γy, γz)Trepresent the
+direction vector of the axis of the endpoint coordinate system
+in the base coordinate system, respectively.
+LetTp=T, we have,
+ϕ= arctan(py
+px) (13)
+θ= 2 arctan(py
+pzsinϕ) (14)
+r=pz
+sinθ(15)
+By substituting (13), (14) and (15) into (1), (3) and (7), the
+rotation angle of the servo disk can be obtained according to
+the coordinates of the endpoint or spatical posture, completing
+the analysis of the inverse kinematics.
+Rotation angles
+of four servos
+Forward 
+kinematics
+Simulation of 
+space postureExperiment of 
+space postureSimulation of 
+workspaceCircular trajectory 
+points
+Inverse 
+kinematics
+Rotation angles
+of four servos
+Simulation of 
+circular trajectoryExperiment of 
+circular trajectory
+ Highly 
+consistent?space posture
+ parameters
+Yes No
+Forward kinematics 
+is correctForward kinematics 
+is wrongCompare the results with 
+the theoretical circle
+ Highly 
+consistent?Yes No
+Inverse kinematics 
+is correctInverse kinematics 
+is wrong
+Fig. 3. Kinematic correctness verification flow chart.
+As shown in Fig. 3, the subsequent content of this ar-
+ticle will validate the correctness of the kinematic analysis
+mentioned above. Correct kinematic analysis is crucial for
+achieving precise control and highly efficient motion of the
+soft robotic arm.
+IV. V ERIFICATION OF FORWARD KINEMATICS
+In this part, we verify the correctness of forward kinematic
+analysis by comparing the simulation and experimental spatial
+postures. Firstly, we draw the spatial postures of the arm
+through simulation under different inputs. Subsequently, the
+Monte Carlo method is employed to compute the precise
+spatial position of the endpoint, and the workspace of the
+arm can be obtained. Finally, we conduct experiments on the
+actual prototype and compare the experimental results with
+simulation results under the same inputs.
+211
+
+A. Simulation of spatial posture
+Because the shape of the arm body is simplified to a
+cylinder, the shape of the central axis and the outline of
+the column core are shown only during the simulation. The
+spatial postures can be obtained when the inputs of four servos
+are given. Some spatial posture simulation results are shown
+in Fig. 4, which indicate excellent bending performance. In
+addition, the different spatial postures can make the robotic
+arm adapt to various environments.
+(a)
+ (b)
+ (c)
+Fig. 4. Some simulation results of spatial posture.
+B. Simulation of workspace
+A commonly employed method for simulating and ana-
+lyzing the workspace of robotic arms is the Monte Carlo
+method. Based on the principle of random sampling, it can
+randomly select points in the joint activity space of the robotic
+arm, and calculate the coordinate values corresponding to the
+random points through simulation. When the sampled data is
+sufficient, the workspace of the robotic arm can be obtained.
+It is specified that the variation range of the four servos is
+[-90°, 90°], and 125000 points are randomly generated within
+this range. The simulation result of the workspace is shown
+in Fig. 5.
+(a) Workspace simulation result
+ (b) Range of coordinates at the endpoints
+Fig. 5. Workspace simulation of the soft robotic arm.
+C. Experiment of spatial posture
+By inputting the rotation angles of the four servos, we can
+control the deflection and bending of the soft robotic arm. The
+vertical projection of the end is marked on a horizontal grid
+coordinate paper. Based on the projection mark, the xand
+ycoordinates of the end are obtained for each posture. The
+vertical distance between the endpoint center and the base
+point Ois measured as the zcoordinate. Some spatial posture
+experiment results are shown in Fig. 6, with each spatialposture corresponding to the simulation results in Fig. 4.
+The simulation and experimental results are highly consistent,
+suggesting the rationality of the structural design and forward
+kinematics.
+(a)
+ (b)
+ (c)
+Fig. 6. Some experimental results of spatial posture.
+(a) Comparison of deflection angle ϕ
+ (b) Comparison of central angle θ
+(c) Comparison of endpoint position
+ (d) Distance of endpoint position
+Fig. 7. Comparison of spatial posture between simulation and experiment.
+We conduct 34 spatial posture simulations and the corre-
+sponding experiments are carried out on the actual prototype.
+Fig. 7 (a), (b), and (c) show the comparison of deflection angle
+ϕ, central angle θand endpoint position, respectively. And
+Fig. 7 (d) shows the distance of endpoint position between
+the simulation and experiment. It can be observed that the
+experimental data of the arm closely match the simulation
+data, further verifying the applicability of the model.
+Kinematics is grounded on the assumption that the arm body
+bends with constant curvature. In addition, installation errors
+in actual prototype are caused, and there is motion friction dur-
+ing experiments. So there inevitably exist differences between
+the simulation and experimental results. Apart from minor data
+fluctuations, the error is in a reasonable range.
+V. V ERIFICATION OF INVERSE KINEMATICS
+In this part, we perform circular trajectory planning to
+validate the correctness of inverse kinematic analysis. Firstly,
+determine the position and size of the theoretical circle based
+on the workspace, and select the circular trajectory points from
+the theoretical circle. Then, use inverse kinematics to obtain
+the corresponding inputs for each circular trajectory point.
+Finally, the simulation and experimental circular trajectories
+are obtained by using the above data, and compared with
+the theoretical circle to validate the rationality of inverse
+kinematics.
+212
+
+Within the workspace range shown in Fig. 5, we select some
+points to form an approximate circle, the spatial positions of
+the 12 points are shown as,
+ϕ=t·π/6(t= 1,2,· · ·,12)
+x= 85.75 cos ϕ, y= 85.75 sin ϕ, z= 49.6(16)
+Fig. 8. Simulation postures corresponding to circular trajectory points.
+As shown in Fig. 8, twelve points on a circle with the radius
+of 85.75mm are selected as the positions of the endpoints
+of the soft robotic arm. The 12 designated points distribute
+uniformly on a circle that is parallel to the xoy plane.
+Through inverse kinematics calculation, the 12 sets of input
+angles of the servos can be obtained. The obtained data are
+input into the actual prototype to generate a series of spatial
+postures. Fig. 9 shows experimental postures corresponding to
+circular trajectory points.
+(a) 12 discrete postures
+ (b) Composition diagram
+Fig. 9. Experimental postures corresponding to circular trajectory points.
+(a) Comparison of the results
+ (b) Top view
+Fig. 10. Comparison of theoretical circle with simulation and experimental
+results.
+As shown in Fig. 10, the simulation and experimental
+polygonal trajectories are both approximate to theoreticalcircular trajectory. The result validates the applicability of
+inverse kinematics.
+VI. C ONCLUSION
+In this paper, a rope-driven soft robotic arm is designed
+based on biological characteristics, and it can adapt to different
+working environments by adjusting its posture and can also
+realize two functions of wrapping and adsorbing objects, and
+the arm has a high degree of flexibility and adaptability.
+The kinematic analysis is carried out based on the constant
+curvature assumption. In addition, on the basis of discrete
+inputs, the experimental results and simulation results are
+highly consistent, which verifies the rationality of the structural
+design and the forward kinematic model. Finally, the applica-
+bility of inverse kinematics is proved through the experiment
+of circular trajectory. Further research on control algorithms
+and optimization of structural parameters will be conducted to
+improve the motion performance of the soft robotic arm.

@@ -1,6 +1,8 @@
 import os
+import re
 import string
 import nltk
+from nltk.tokenize import sent_tokenize
 from PyPDF2 import PdfReader
 from collections import Counter
 
@@ -125,7 +127,7 @@ for nome_arquivo, tokens in artigos_processados.items():
 
 print("\n")
 
-# Etapa de encontrar os 10 termos mais recorrentes em todos os artigos
+# Etapa para encontrar os 10 termos mais recorrentes em todos os artigos
 
 # Uni todos os tokens de artigos em um só vetor
 todos_tokens = []
@@ -148,3 +150,80 @@ termos_recorrentes = bag_of_words.most_common(10)
 print("\nOs 10 termos mais recorrentes nos artigos:")
 for termo, frequencia in termos_recorrentes:
     print(f"{termo}: {frequencia} ocorrências")
+
+    # Salva os termos recorrentes em arquivo txt
+    with open("termos_recorrentes.txt", "w", encoding="utf-8") as f:
+        for termo, freq in termos_recorrentes:
+            f.write(f"{termo}: {freq}\n")
+
+
+print("--- Iniciando extração de informações (Objetivo, Problema...) ---")
+info_extraida = {}
+
+# Palavras-chave por categoria
+palavras_chave = {
+    "objetivo": ["objective", "aim", "purpose", "goal", "the main goal"],
+    "problema": ["problem", "issue", "challenge", "gap", "difficulty"],
+    "metodologia": ["method", "methodology", "approach", "procedure", "framework", "survey", "analysis"],
+    "contribuicao": ["contribution", "contributes", "this study adds"]
+}
+
+for nome_artigo, texto in texto_artigos.items():
+    print(f"Extraindo de: {nome_artigo}")
+    
+    # Dicionário para guardar as informações do artigo atual
+    info = {"objetivo": "", "problema": "", "metodologia": "", "contribuicao": ""}
+    
+    texto_lower = texto.lower() # Trabalhar com o texto em minúsculas para a busca
+    
+    # Itera sobre cada categoria que queremos extrair
+    for categoria, chaves in palavras_chave.items():
+        # Itera sobre cada palavra-chave da categoria
+        for chave in chaves:
+            # Procura a primeira ocorrência da palavra-chave no texto
+            posicao_chave = texto_lower.find(chave)
+            
+            # Se a chave foi encontrada e a categoria ainda não foi preenchida
+            if posicao_chave != -1 and not info[categoria]:
+                # Encontra o ponto final ANTERIOR à palavra-chave
+                inicio_frase = texto_lower.rfind('.', 0, posicao_chave)
+                
+                # Encontra o ponto final POSTERIOR à palavra-chave
+                fim_frase = texto_lower.find('.', posicao_chave)
+
+                # Se não encontrou um ponto final depois, pega até o fim do texto
+                if fim_frase == -1:
+                    fim_frase = len(texto_lower)
+
+                # Extrai a frase do texto original (com a capitalização correta)
+                # O +1 é para começar a capturar depois do ponto final
+                frase_extraida = texto[inicio_frase + 1 : fim_frase].strip()
+                
+                # Armazena a frase e para de procurar outras chaves para esta categoria
+                info[categoria] = frase_extraida.replace('\n', ' ').strip()
+                break # Vai para a próxima categoria
+    
+    info_extraida[nome_artigo] = info
+print("Extração de informações finalizada.\n")
+
+
+# --- ETAPA 5: SALVAR RESULTADOS FINAIS ---
+
+print("--- Salvando resultados consolidados ---")
+nome_arquivo_saida = "extracoes_final.txt"
+with open(nome_arquivo_saida, "w", encoding="utf-8") as f:
+    # Escreve o cabeçalho do arquivo
+    f.write("NomeArquivo;;Objetivo;;Problema;;Metodologia;;Contribuicao\n")
+    
+    for nome_arquivo, dados in info_extraida.items():
+        # Usa .get() para pegar o valor ou um padrão "Não encontrado"
+        objetivo = dados.get("objetivo", "Não encontrado.").replace("\n", " ").strip()
+        problema = dados.get("problema", "Não encontrado.").replace("\n", " ").strip()
+        metodologia = dados.get("metodologia", "Não encontrado.").replace("\n", " ").strip()
+        contribuicao = dados.get("contribuicao", "Não encontrado.").replace("\n", " ").strip()
+        
+        # Formata a linha e adiciona aspas para garantir que o CSV funcione bem
+        linha = f'"{nome_arquivo}";;"{objetivo}";;"{problema}";;"{metodologia}";;"{contribuicao}"\n'
+        f.write(linha)
+
+print(f"Script finalizado! Resultados salvos em '{nome_arquivo_saida}'.")
